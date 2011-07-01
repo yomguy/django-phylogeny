@@ -107,3 +107,38 @@ class TaxonCitation(models.Model):
 	
 	def __unicode__(self):
 		return u'"%s" cites:  %s' % (self.taxon, self.citation,)
+
+
+class TaxonomyDatabase(models.Model):
+	'''
+	Represents an external taxonomic database.
+	'''
+	name = models.CharField(_('taxonomy database name'), max_length=256, help_text=_('name of an external taxonomic database such as NCBI, ITIS, etc'))
+	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
+	url = models.URLField(_('URL'), max_length=512, blank=True)
+	
+	class Meta:
+		verbose_name = _('taxonomy database')
+		verbose_name_plural = _('taxonomy databases')
+	
+	def __unicode__(self):
+		return u'%s' % self.name
+
+
+class TaxonomyRecord(models.Model):
+	'''
+	Refers to a taxon record in an external taxonomic database
+	(such as NCBI, ITIS, etc).
+	'''
+	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+	database = models.ForeignKey(TaxonomyDatabase, verbose_name=_('taxonomy database'))
+	record_id = models.CharField(_('taxon record ID'), max_length=256, help_text=_('ID of this record in the specified taxonomic database'))
+	url = models.URLField(_('URL'), max_length=512, blank=True, help_text=_('URL of this record in the specified taxonomic database'))
+	
+	class Meta:
+		verbose_name = _('taxonomy record')
+		verbose_name_plural = _('taxonomy records')
+		unique_together = ('database', 'record_id',)
+	
+	def __unicode__(self):
+		return u'%s %s' % (self.database, self.record_id,)
