@@ -98,7 +98,7 @@ class TaxonCitation(models.Model):
 	Specifies a relationship between a citation and a taxon.
 	'''
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
-	citation = models.ForeignKey(Citation, verbose_name=_('taxon'))
+	citation = models.ForeignKey(Citation, verbose_name=_('citation'))
 	
 	class Meta:
 		verbose_name = _('taxon citation')
