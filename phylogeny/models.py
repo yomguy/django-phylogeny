@@ -103,6 +103,7 @@ class TaxonCitation(models.Model):
 	class Meta:
 		verbose_name = _('taxon citation')
 		verbose_name_plural = _('taxon citations')
+		unique_together = ('taxon', 'citation',)
 	
 	def __unicode__(self):
 		return u'"%s" cites:  %s' % (self.taxon, self.citation,)
