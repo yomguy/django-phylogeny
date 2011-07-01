@@ -126,7 +126,7 @@ class TaxonomyDatabase(models.Model):
 
 class TaxonomyRecord(models.Model):
 	'''
-	Refers to a taxon record in an external taxonomic databse
+	Refers to a taxon record in an external taxonomic database
 	(such as NCBI, ITIS, etc).
 	'''
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
