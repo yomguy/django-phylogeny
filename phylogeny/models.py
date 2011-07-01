@@ -142,3 +142,26 @@ class TaxonomyRecord(models.Model):
 	
 	def __unicode__(self):
 		return u'%s %s' % (self.database, self.record_id,)
+
+
+class DistributionPoint(models.Model):
+	'''
+	Marks a geographic point where a taxon appears.
+	'''
+	place_name = models.CharField(_('place name'), max_length=64, blank=True, help_text=_('name of a place where taxon appears; use with or instead of latitude and longitude'))
+	latitude = models.FloatField(_('latitude'), null=True, blank=True)
+	longitude = models.FloatField(_('longitude'), null=True, blank=True)
+	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+	
+	class Meta:
+		verbose_name = _('distribution point')
+		verbose_name_plural = _('distribution points')
+		unique_together = ('place_name', 'latitude', 'longitude', 'taxon',)
+	
+	def __unicode__(self):
+		string = u'%s' % self.place_name
+		if self.latitude and self.longitude:
+			string = u'(%+f, %+f)' % (self.latitude, self.longitude,)
+		if self.place_name and self.latitude and self.longitude:
+			string = u'%s (%+f, %+f)' % (self.place_name, self.latitude, self.longitude,)
+		return string
