@@ -184,11 +184,11 @@ class TaxonImage(models.Model):
 	width = models.IntegerField(_('width'), null=True, blank=True, help_text=_('width in pixels of this image'))
 	height = models.IntegerField(_('height'), null=True, blank=True, help_text=_('height in pixels of this image'))
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
-
+	
 	class Meta:
 		verbose_name = _('taxon image')
 		verbose_name_plural = _('taxon images')
-
+	
 	def __unicode__(self):
 		return u'%s' % self.caption
 
