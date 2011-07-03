@@ -86,7 +86,7 @@ class Citation(models.Model):
 	description = models.CharField(_('description'), unique=True, max_length=256)
 	url = models.URLField(_('URL'), verify_exists=False, max_length=512, blank=True)
 	doi = models.CharField(_(u'DOI\u00AE: digital object identifier'), max_length=256, blank=True)
-	taxon = models.ManyToManyField(Taxon, verbose_name=_('taxon'), through='TaxonCitation')
+	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
 	
 	class Meta:
 		verbose_name = _('citation')
@@ -94,24 +94,8 @@ class Citation(models.Model):
 	
 	def __unicode__(self):
 		if self.doi:
-			return u'%s (%s)' % (self.description, self.doi,)
-		return u'%s' % self.description
-
-
-class TaxonCitation(models.Model):
-	'''
-	Specifies a relationship between a citation and a taxon.
-	'''
-	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
-	citation = models.ForeignKey(Citation, verbose_name=_('citation'))
-	
-	class Meta:
-		verbose_name = _('taxon citation')
-		verbose_name_plural = _('taxon citations')
-		unique_together = ('taxon', 'citation',)
-	
-	def __unicode__(self):
-		return u'"%s" cites:  %s' % (self.taxon, self.citation,)
+			return u'%s:  %s (%s)' % (self.taxon, self.description, self.doi,)
+		return u'%s:  %s' % (self.taxon, self.description,)
 
 
 class TaxonomyDatabase(models.Model):
