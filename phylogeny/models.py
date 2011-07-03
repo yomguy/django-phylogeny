@@ -35,6 +35,11 @@ class Taxon(mptt_models.MPTTModel):
 	# body length
 	body_length_value = models.SmallIntegerField(_('body length value'), null=True, blank=True, help_text=_('metric units'))
 	body_length_unit = models.CharField(_('body length unit'), default=app_settings.TAXON_BODY_LENGTH_UNIT_DEFAULT, choices=app_settings.TAXON_BODY_LENGTH_UNIT_CHOICES, max_length=2, blank=True, help_text=_('metric unit'))
+	# social unit
+	social_unit_type = models.CharField(_('social unit type'), default=app_settings.TAXON_SOCIAL_UNIT_DEFAULT, choices=app_settings.TAXON_SOCIAL_UNIT_CHOICES, max_length=32, blank=True)
+	social_unit_size_min = models.SmallIntegerField(_('minimum social unit size'), null=True, blank=True, help_text=_('number of individuals'))
+	social_unit_size_max = models.SmallIntegerField(_('maximum social unit size'), null=True, blank=True, help_text=_('number of individuals'))
+	social_unit_annotation = models.TextField(_('social unit annotation'), blank=True)
 	# tree information
 	branch_length = models.FloatField(_('branch length'), default=app_settings.TAXON_BRANCH_LENGTH_DEFAULT, null=True, blank=True)
 	parent = mptt_models.TreeForeignKey('self', verbose_name=_('parent taxon'), null=True, blank=True, related_name='children')

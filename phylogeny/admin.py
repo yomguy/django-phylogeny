@@ -67,7 +67,7 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin):
 		}),
 		(_('additional information'), {
 			'classes': ('collapse',),
-			'fields': (('color', 'body_length_value', 'body_length_unit',),)
+			'fields': (('color', 'body_length_value', 'body_length_unit',), ('social_unit_type', 'social_unit_size_min', 'social_unit_size_max',), 'social_unit_annotation',)
 		}),
 		(_('tree'), {
 			'classes': ('collapse',),
