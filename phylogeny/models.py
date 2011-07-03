@@ -5,6 +5,7 @@ from mptt import models as mptt_models
 from Bio.Phylo.PhyloXML import Taxonomy
 
 from phylogeny import app_settings
+from phylogeny import utils
 
 
 class Taxon(mptt_models.MPTTModel):
@@ -154,3 +155,40 @@ class DistributionPoint(models.Model):
 		if self.place_name and self.latitude and self.longitude:
 			string = u'%s (%+f, %+f)' % (self.place_name, self.latitude, self.longitude,)
 		return string
+
+
+class TaxonImageCategory(models.Model):
+	'''
+	Describes a category of image.
+	'''
+	name = models.CharField(_('category name'), max_length=256)
+	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
+	
+	class Meta:
+		verbose_name = _('taxon image category')
+		verbose_name_plural = _('taxon image categories')
+	
+	def __unicode__(self):
+		return u'%s' % self.name
+
+
+class TaxonImage(models.Model):
+	'''
+	Stores an image for a taxon.
+	'''
+	caption = models.CharField(_('caption'), unique=True, max_length=256)
+	credit = models.CharField(_('credit'), max_length=128, blank=True)
+	category = models.ForeignKey(Taxon, verbose_name=_('category'), null=True, blank=True)
+	primary = models.BooleanField(_('primary image'), help_text=_('primary image for specified taxon'))
+	image = models.ImageField(_('source'), upload_to=utils.get_taxon_image_upload_to)
+	width = models.IntegerField(_('width'), null=True, blank=True, help_text=_('width in pixels of this image'))
+	height = models.IntegerField(_('height'), null=True, blank=True, help_text=_('height in pixels of this image'))
+	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+
+	class Meta:
+		verbose_name = _('taxon image')
+		verbose_name_plural = _('taxon images')
+
+	def __unicode__(self):
+		return u'%s' % self.caption
+
