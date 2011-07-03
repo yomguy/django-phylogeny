@@ -54,7 +54,10 @@ class Taxon(mptt_models.MPTTModel):
 	
 	def __unicode__(self):
 		return u'%s' % self.name
-		
+	
+	def natural_key(self):
+		return (self.slug,)
+	
 	def is_leaf_node(self):
 		return super(Taxon, self).is_leaf_node()
 	is_leaf_node.boolean = True
@@ -97,6 +100,9 @@ class Citation(models.Model):
 		if self.doi:
 			return u'%s:  %s (%s)' % (self.taxon, self.description, self.doi,)
 		return u'%s:  %s' % (self.taxon, self.description,)
+	
+	def natural_key(self):
+		return (self.description,)
 
 
 class TaxonomyDatabase(models.Model):
@@ -113,6 +119,9 @@ class TaxonomyDatabase(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % self.name
+	
+	def natural_key(self):
+		return (self.slug,)
 
 
 class TaxonomyRecord(models.Model):
@@ -132,6 +141,10 @@ class TaxonomyRecord(models.Model):
 	
 	def __unicode__(self):
 		return u'%s %s' % (self.database, self.record_id,)
+	
+	def natural_key(self):
+		return (self.record_id,) + self.database.natural_key()
+	natural_key.dependencies = (TaxonomyDatabase,)
 
 
 class DistributionPoint(models.Model):
@@ -155,6 +168,10 @@ class DistributionPoint(models.Model):
 		if self.place_name and self.latitude and self.longitude:
 			string = u'%s (%+f, %+f)' % (self.place_name, self.latitude, self.longitude,)
 		return string
+	
+	def natural_key(self):
+		return (self.place_name, self.latitude, self.longitude,) + self.taxon.natural_key()
+	natural_key.dependencies = (Taxon,)
 
 
 class TaxonImageCategory(models.Model):
@@ -170,6 +187,9 @@ class TaxonImageCategory(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % self.name
+	
+	def natural_key(self):
+		return (self.slug,)
 
 
 class TaxonImage(models.Model):
@@ -178,7 +198,7 @@ class TaxonImage(models.Model):
 	'''
 	caption = models.CharField(_('caption'), unique=True, max_length=256)
 	credit = models.CharField(_('credit'), max_length=128, blank=True)
-	category = models.ForeignKey(Taxon, verbose_name=_('category'), null=True, blank=True)
+	category = models.ForeignKey(TaxonImageCategory, verbose_name=_('category'), null=True, blank=True)
 	primary = models.BooleanField(_('primary image'), help_text=_('primary image for specified taxon'))
 	image = models.ImageField(_('source'), upload_to=utils.get_taxon_image_upload_to)
 	width = models.IntegerField(_('width'), null=True, blank=True, help_text=_('width in pixels of this image'))
@@ -191,4 +211,7 @@ class TaxonImage(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % self.caption
+	
+	def natural_key(self):
+		return (self.caption,)
 
