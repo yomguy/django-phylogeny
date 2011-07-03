@@ -178,7 +178,7 @@ class TaxonImage(models.Model):
 	'''
 	caption = models.CharField(_('caption'), unique=True, max_length=256)
 	credit = models.CharField(_('credit'), max_length=128, blank=True)
-	category = models.ForeignKey(Taxon, verbose_name=_('category'), null=True, blank=True)
+	category = models.ForeignKey(TaxonImageCategory, verbose_name=_('category'), null=True, blank=True)
 	primary = models.BooleanField(_('primary image'), help_text=_('primary image for specified taxon'))
 	image = models.ImageField(_('source'), upload_to=utils.get_taxon_image_upload_to)
 	width = models.IntegerField(_('width'), null=True, blank=True, help_text=_('width in pixels of this image'))
