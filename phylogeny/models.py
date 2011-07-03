@@ -144,7 +144,6 @@ class TaxonomyRecord(models.Model):
 	
 	def natural_key(self):
 		return (self.record_id,) + self.database.natural_key()
-	natural_key.dependencies = (TaxonomyDatabase,)
 
 
 class DistributionPoint(models.Model):
@@ -171,7 +170,6 @@ class DistributionPoint(models.Model):
 	
 	def natural_key(self):
 		return (self.place_name, self.latitude, self.longitude,) + self.taxon.natural_key()
-	natural_key.dependencies = (Taxon,)
 
 
 class TaxonImageCategory(models.Model):
