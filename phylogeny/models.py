@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from mptt import models as mptt_models
+from mptt.managers import TreeManager
 from Bio.Phylo.PhyloXML import Taxonomy
 
 from phylogeny import app_settings
@@ -47,6 +48,9 @@ class Taxon(mptt_models.MPTTModel):
 	# dates
 	date_created = models.DateTimeField(_('date created'), auto_now_add=True)
 	date_modified = models.DateTimeField( _('date modified'), auto_now=True)
+	
+	# manager
+	objects = TreeManager()
 	
 	class Meta:
 		verbose_name = _('taxon')
