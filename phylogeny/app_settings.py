@@ -18,9 +18,14 @@ TAXON_APPEARANCE_DATE_UNIT_CHOICES = (
 	('hya', _('hundred years ago'),),
 	('ya', _('years ago'),),
 )
+TAXON_SOCIAL_UNIT_CHOICES = (
+	('', _('none'),),
+	('colony', _('colony'),),
+)
 
 
 # default field values
 TAXON_BRANCH_LENGTH_DEFAULT = 1.0
 TAXON_BODY_LENGTH_UNIT_DEFAULT = 'mm'
 TAXON_APPEARANCE_DATE_UNIT_DEFAULT = 'mya'
+TAXON_SOCIAL_UNIT_DEFAULT = ''
