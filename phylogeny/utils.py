@@ -119,4 +119,3 @@ def export_phylogeny(root_taxon, path=None, format='phyloxml'):
 	'''
 	phylogeny = get_phylogeny(root_taxon)
 	write(phylogeny, path, format)
-	return None
