@@ -110,7 +110,7 @@ class TaxonomyDatabase(models.Model):
 	'''
 	name = models.CharField(_('taxonomy database name'), max_length=256, help_text=_('name of an external taxonomic database such as NCBI, ITIS, etc'))
 	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
-	url = models.URLField(_('URL'), max_length=512, blank=True)
+	url = models.URLField(_('URL'), max_length=512)
 	
 	# manager
 	objects = managers.TaxonomyDatabaseManager()
