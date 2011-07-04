@@ -94,9 +94,6 @@ class Citation(models.Model):
 	doi = models.CharField(_(u'DOI\u00AE: digital object identifier'), max_length=256, blank=True)
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
 	
-	# manager
-	objects = managers.CitationManager()
-	
 	class Meta:
 		verbose_name = _('citation')
 		verbose_name_plural = _('citations')
@@ -190,9 +187,6 @@ class TaxonImageCategory(models.Model):
 	name = models.CharField(_('category name'), max_length=256)
 	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
 	
-	# manager
-	objects = managers.TaxonImageCategoryManager()
-	
 	class Meta:
 		verbose_name = _('taxon image category')
 		verbose_name_plural = _('taxon image categories')
@@ -213,9 +207,6 @@ class TaxonImage(models.Model):
 	width = models.IntegerField(_('width'), null=True, blank=True, help_text=_('width in pixels of this image'))
 	height = models.IntegerField(_('height'), null=True, blank=True, help_text=_('height in pixels of this image'))
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
-	
-	# manager
-	objects = managers.TaxonImageManager()
 	
 	class Meta:
 		verbose_name = _('taxon image')

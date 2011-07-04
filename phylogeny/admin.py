@@ -4,10 +4,23 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt import admin as mptt_admin
 
-from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImage, TaxonImageCategory
+from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImageCategory, TaxonImage
 
 
-class CitationAdmin(admin.TabularInline):
+# load modeltranslation admin classes if available
+# if not present, default admin classes are used
+try:
+	from modeltranslation import admin as modeltranslation_admin
+	ModelAdmin = modeltranslation_admin.TranslationAdmin
+	TabularInline = modeltranslation_admin.TranslationTabularInline
+	StackedInline = modeltranslation_admin.TranslationStackedInline
+except:
+	ModelAdmin = admin.ModelAdmin
+	TabularInline = admin.TabularInline
+	StackedInline = admin.StackedInline
+
+
+class CitationAdmin(StackedInline):
 	model = Citation
 	extra = 1
 
@@ -21,16 +34,16 @@ class TaxonomyRecordAdmin(admin.TabularInline):
 	extra = 1
 
 
-class DistributionPointAdmin(admin.TabularInline):
+class DistributionPointAdmin(TabularInline):
 	model = DistributionPoint
 	extra = 1
 
 
-class TaxonImageCategoryAdmin(admin.ModelAdmin):
+class TaxonImageCategoryAdmin(ModelAdmin):
 	prepopulated_fields = {'slug': ('name',)}
 
 
-class TaxonImageAdmin(admin.TabularInline):
+class TaxonImageAdmin(StackedInline):
 	model = TaxonImage
 	exclude = ('width', 'height',)
 	extra = 1
@@ -71,20 +84,21 @@ class LeafNodeListFilter(admin.SimpleListFilter):
 			return queryset.filter(~Q(pk__in=leaf_pk_list))
 
 
-class TaxonAdmin(mptt_admin.MPTTModelAdmin):
+class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 	list_display = ('name', 'rank', 'is_leaf_node',)
 	list_filter = (LeafNodeListFilter,)
 	search_fields = ('name', 'common_name', 'rank',)
 	readonly_fields = ('is_leaf_node',)
 	prepopulated_fields = {'slug': ('name',)}
 	save_on_top = True
+	inlines = (CitationAdmin, TaxonImageAdmin, DistributionPointAdmin, TaxonomyRecordAdmin,)
 	fieldsets = (
 		(None, {
 			'classes': ('wide',),
 			'fields': (('name', 'slug',), 'rank', 'is_leaf_node',)
 		}),
 		(_('general information'), {
-			'fields': (('common_name', 'tagline',), 'description', 'ecology', 'distribution')
+			'fields': ('common_name', 'tagline', 'description', 'ecology', 'distribution',)
 		}),
 		(_('attribution'), {
 			'classes': ('collapse', 'wide',),
@@ -96,7 +110,7 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin):
 		}),
 		(_('additional information'), {
 			'classes': ('collapse',),
-			'fields': (('color', 'body_length_value', 'body_length_unit',), ('social_unit_type', 'social_unit_size_min', 'social_unit_size_max',), 'social_unit_annotation',)
+			'fields': ('color', ('body_length_value', 'body_length_unit',), ('social_unit_type', 'social_unit_size_min', 'social_unit_size_max',), 'social_unit_annotation',)
 		}),
 		(_('tree'), {
 			'classes': ('collapse',),
