@@ -2,11 +2,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from mptt import models as mptt_models
-from mptt.managers import TreeManager
 from Bio.Phylo.PhyloXML import Taxonomy
 
-from phylogeny import app_settings
-from phylogeny import utils
+from phylogeny import app_settings, utils, managers
 
 
 class Taxon(mptt_models.MPTTModel):
@@ -50,7 +48,7 @@ class Taxon(mptt_models.MPTTModel):
 	date_modified = models.DateTimeField( _('date modified'), auto_now=True)
 	
 	# manager
-	objects = TreeManager()
+	objects = managers.TaxonManager()
 	
 	class Meta:
 		verbose_name = _('taxon')
@@ -96,6 +94,9 @@ class Citation(models.Model):
 	doi = models.CharField(_(u'DOI\u00AE: digital object identifier'), max_length=256, blank=True)
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
 	
+	# manager
+	objects = managers.CitationManager()
+	
 	class Meta:
 		verbose_name = _('citation')
 		verbose_name_plural = _('citations')
@@ -116,6 +117,9 @@ class TaxonomyDatabase(models.Model):
 	name = models.CharField(_('taxonomy database name'), max_length=256, help_text=_('name of an external taxonomic database such as NCBI, ITIS, etc'))
 	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
 	url = models.URLField(_('URL'), max_length=512, blank=True)
+	
+	# manager
+	objects = managers.TaxonomyDatabaseManager()
 	
 	class Meta:
 		verbose_name = _('taxonomy database')
@@ -138,6 +142,9 @@ class TaxonomyRecord(models.Model):
 	record_id = models.CharField(_('taxon record ID'), max_length=256, help_text=_('ID of this record in the specified taxonomic database'))
 	url = models.URLField(_('URL'), max_length=512, blank=True, help_text=_('URL of this record in the specified taxonomic database'))
 	
+	# manager
+	objects = managers.TaxonomyRecordManager()
+	
 	class Meta:
 		verbose_name = _('taxonomy record')
 		verbose_name_plural = _('taxonomy records')
@@ -158,6 +165,9 @@ class DistributionPoint(models.Model):
 	latitude = models.FloatField(_('latitude'), null=True, blank=True)
 	longitude = models.FloatField(_('longitude'), null=True, blank=True)
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+	
+	# manager
+	objects = managers.DistributionPointManager()
 	
 	class Meta:
 		verbose_name = _('distribution point')
@@ -183,6 +193,9 @@ class TaxonImageCategory(models.Model):
 	name = models.CharField(_('category name'), max_length=256)
 	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
 	
+	# manager
+	objects = managers.TaxonImageCategoryManager()
+	
 	class Meta:
 		verbose_name = _('taxon image category')
 		verbose_name_plural = _('taxon image categories')
@@ -206,6 +219,9 @@ class TaxonImage(models.Model):
 	width = models.IntegerField(_('width'), null=True, blank=True, help_text=_('width in pixels of this image'))
 	height = models.IntegerField(_('height'), null=True, blank=True, help_text=_('height in pixels of this image'))
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+	
+	# manager
+	objects = managers.TaxonImageManager()
 	
 	class Meta:
 		verbose_name = _('taxon image')
