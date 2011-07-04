@@ -89,7 +89,7 @@ class Citation(models.Model):
 	'''
 	Cites source work for a taxon.
 	'''
-	description = models.CharField(_('description'), unique=True, max_length=256)
+	description = models.CharField(_('description'), max_length=256)
 	url = models.URLField(_('URL'), verify_exists=False, max_length=512, blank=True)
 	doi = models.CharField(_(u'DOI\u00AE: digital object identifier'), max_length=256, blank=True)
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
@@ -105,9 +105,6 @@ class Citation(models.Model):
 		if self.doi:
 			return u'%s:  %s (%s)' % (self.taxon, self.description, self.doi,)
 		return u'%s:  %s' % (self.taxon, self.description,)
-	
-	def natural_key(self):
-		return (self.description,)
 
 
 class TaxonomyDatabase(models.Model):
@@ -162,8 +159,8 @@ class DistributionPoint(models.Model):
 	Marks a geographic point where a taxon appears.
 	'''
 	place_name = models.CharField(_('place name'), max_length=64, blank=True, help_text=_('name of a place where taxon appears; use with or instead of latitude and longitude'))
-	latitude = models.FloatField(_('latitude'), null=True, blank=True)
-	longitude = models.FloatField(_('longitude'), null=True, blank=True)
+	latitude = models.FloatField(_('latitude'))
+	longitude = models.FloatField(_('longitude'))
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
 	
 	# manager
@@ -172,7 +169,7 @@ class DistributionPoint(models.Model):
 	class Meta:
 		verbose_name = _('distribution point')
 		verbose_name_plural = _('distribution points')
-		unique_together = ('place_name', 'latitude', 'longitude', 'taxon',)
+		unique_together = ('latitude', 'longitude', 'taxon',)
 	
 	def __unicode__(self):
 		string = u'%s' % self.place_name
@@ -183,7 +180,7 @@ class DistributionPoint(models.Model):
 		return string
 	
 	def natural_key(self):
-		return (self.place_name, self.latitude, self.longitude,) + self.taxon.natural_key()
+		return (self.latitude, self.longitude,) + self.taxon.natural_key()
 
 
 class TaxonImageCategory(models.Model):
@@ -202,16 +199,13 @@ class TaxonImageCategory(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % self.name
-	
-	def natural_key(self):
-		return (self.slug,)
 
 
 class TaxonImage(models.Model):
 	'''
 	Stores an image for a taxon.
 	'''
-	caption = models.CharField(_('caption'), unique=True, max_length=256)
+	caption = models.CharField(_('caption'), max_length=256)
 	credit = models.CharField(_('credit'), max_length=128, blank=True)
 	category = models.ForeignKey(TaxonImageCategory, verbose_name=_('category'), null=True, blank=True)
 	primary = models.BooleanField(_('primary image'), help_text=_('primary image for specified taxon'))
@@ -229,7 +223,4 @@ class TaxonImage(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % self.caption
-	
-	def natural_key(self):
-		return (self.caption,)
 
