@@ -4,7 +4,36 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt import admin as mptt_admin
 
-from phylogeny.models import Taxon
+from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImage, TaxonImageCategory
+
+
+class CitationAdmin(admin.TabularInline):
+	model = Citation
+	extra = 1
+
+
+class TaxonomyDatabaseAdmin(admin.ModelAdmin):
+	prepopulated_fields = {'slug': ('name',)}
+
+
+class TaxonomyRecordAdmin(admin.TabularInline):
+	model = TaxonomyRecord
+	extra = 1
+
+
+class DistributionPointAdmin(admin.TabularInline):
+	model = DistributionPoint
+	extra = 1
+
+
+class TaxonImageCategoryAdmin(admin.ModelAdmin):
+	prepopulated_fields = {'slug': ('name',)}
+
+
+class TaxonImageAdmin(admin.TabularInline):
+	model = TaxonImage
+	exclude = ('width', 'height',)
+	extra = 1
 
 
 class LeafNodeListFilter(admin.SimpleListFilter):
@@ -76,4 +105,6 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin):
 	)
 
 
+admin.site.register(TaxonomyDatabase, TaxonomyDatabaseAdmin)
+admin.site.register(TaxonImageCategory, TaxonImageCategoryAdmin)
 admin.site.register(Taxon, TaxonAdmin)
