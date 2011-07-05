@@ -42,7 +42,7 @@ class Command(BaseCommand):
 		
 		try:
 			import_phylogeny(path=path, format=options['format'], merge_strategy=options['strategy'])
-			self.stdout.write(_('Successfully imported tree from "%s" in format "%s" with merge strategy "%s"\n') % (path, options['format'], options['strategy']))
+			self.stdout.write(_('Successfully imported tree from "%(path)s" in format "%(format)s" with merge strategy "%(strategy)s"\n') % {'path': path, 'format': options['format'], 'strategy': options['strategy']})
 		except PhylogenyImportMergeConflict as exception:
 			raise CommandError(u'%s' % exception)
 

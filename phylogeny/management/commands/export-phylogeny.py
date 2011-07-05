@@ -29,7 +29,7 @@ class Command(BaseCommand):
 		try:
 			taxon = Taxon.objects.get_by_natural_key(taxon_slug)
 		except Taxon.DoesNotExist:
-			raise CommandError(_('Taxon "%s" does not exist') % taxon_slug)
+			raise CommandError(_('Taxon "%(taxon_slug)s" does not exist') % {'taxon_slug': taxon_slug})
 		
 		try:
 			path = args[1]
@@ -38,6 +38,6 @@ class Command(BaseCommand):
 		
 		try:
 			export_phylogeny(taxon, path=path, format=options['format'])
-			self.stdout.write(_('Successfully exported tree rooted on taxon "%s" to "%s" in format "%s"\n') % (taxon_slug, path, options['format'],))
+			self.stdout.write(_('Successfully exported tree rooted on taxon "%(taxon_slug)s" to "%(path)s" in format "%(format)s"\n') % {'taxon_slug': taxon_slug, 'path': path, 'format': options['format']})
 		except:
-			raise CommandError(_('Failed exporting phylogeny to "%s" in format "%s"') % (path, options['format'],))
+			raise CommandError(_('Failed exporting phylogeny to "%(path)s" in format "%(format)s"') % {'path': path, 'format': options['format']})
