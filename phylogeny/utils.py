@@ -99,7 +99,7 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 	# None merge strategy
 	if merge_strategy is None and not created:
 		# merge strategy is None or other:
-		raise PhylogenyImportMergeConflict(_('Merge conflict occurred using merge strategy None:  taxon with slug "%s" already exists.  Import aborted.') % taxon.slug)
+		raise PhylogenyImportMergeConflict(_('Merge conflict occurred using merge strategy None:  taxon with slug "%(taxon_slug)s" already exists.  Import aborted.') % {'taxon_slug': taxon.slug})
 	
 	# "update" merge strategy
 	if merge_strategy == 'update' and not created:
