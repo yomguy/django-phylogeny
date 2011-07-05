@@ -81,11 +81,15 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 	}
 	
 	# add clade date to taxon defaults if available
-	if clade.date:
-		defaults['appearance_date_unit'] = clade.date.unit
-		defaults['appearance_date_annotation'] = clade.date.desc
-		defaults['appearance_date_min_value'] = clade.date.minimum
-		defaults['appearance_date_max_value'] = clade.date.maximum
+	if hasattr(clade, 'date'):
+		if hasattr(clade.date, 'unit'):
+			defaults['appearance_date_unit'] = clade.date.unit
+		if hasattr(clade.date, 'desc'):
+			defaults['appearance_date_annotation'] = clade.date.desc
+		if hasattr(clade.date, 'minimum'):
+			defaults['appearance_date_min_value'] = clade.date.minimum
+		if hasattr(clade.date, 'maximum'):
+			defaults['appearance_date_max_value'] = clade.date.maximum
 	
 	# get or create a taxon matching root_clade.name
 	taxon, created = Taxon.objects.get_or_create(slug=slugify(clade.name or ''), defaults=defaults)
@@ -93,20 +97,20 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 	# None merge strategy
 	if merge_strategy is None and not created:
 		# merge strategy is None or other:
-		raise PhylogenyImportMergeConflict(_('Merge conflict occurred:  taxon with slug %s already exists.  Import aborted.') % taxon.slug)
+		raise PhylogenyImportMergeConflict(_('Merge conflict occurred using merge strategy None:  taxon with slug "%s" already exists.  Import aborted.') % taxon.slug)
 	
 	# "update" merge strategy
-	if merge_strategy is 'update' and not created:
+	if merge_strategy == 'update' and not created:
 		# unlink taxon's children (in effect orphaning them)
 		for child in taxon.get_children():
 			child.move_to(None)
 	
 	# "create" merge strategy
-	if merge_strategy is 'create' and not created:
+	if merge_strategy == 'create' and not created:
 		# create a new taxon
 		taxon = Taxon.objects.create(**defaults)
 	
-	if merge_strategy is 'create':
+	if merge_strategy == 'create':
 		# import taxonomies, distributions, and references
 		for taxonomy in clade.taxonomies:
 			if taxonomy.id and taxonomy.id.value and taxonomy.id.provider:
