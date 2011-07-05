@@ -81,15 +81,17 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 	}
 	
 	# add clade date to taxon defaults if available
-	if hasattr(clade, 'date'):
-		if hasattr(clade.date, 'unit'):
-			defaults['appearance_date_unit'] = clade.date.unit
-		if hasattr(clade.date, 'desc'):
-			defaults['appearance_date_annotation'] = clade.date.desc
-		if hasattr(clade.date, 'minimum'):
-			defaults['appearance_date_min_value'] = clade.date.minimum
-		if hasattr(clade.date, 'maximum'):
-			defaults['appearance_date_max_value'] = clade.date.maximum
+	# NOTE:  date output is disabled since Biopython can't read its own output
+	# that contains dates
+	#if hasattr(clade, 'date'):
+	#	if hasattr(clade.date, 'unit'):
+	#		defaults['appearance_date_unit'] = clade.date.unit
+	#	if hasattr(clade.date, 'desc'):
+	#		defaults['appearance_date_annotation'] = clade.date.desc
+	#	if hasattr(clade.date, 'minimum'):
+	#		defaults['appearance_date_min_value'] = clade.date.minimum
+	#	if hasattr(clade.date, 'maximum'):
+	#		defaults['appearance_date_max_value'] = clade.date.maximum
 	
 	# get or create a taxon matching root_clade.name
 	taxon, created = Taxon.objects.get_or_create(slug=slugify(clade.name or ''), defaults=defaults)
