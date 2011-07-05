@@ -73,7 +73,7 @@ class LeafNodeListFilter(admin.SimpleListFilter):
 		for root_node in Taxon._tree_manager.root_nodes():
 			if root_node.is_leaf_node():
 				leaf_pk_list += [root_node.pk]
-			leaf_pk_list += Taxon._tree_manager.root_nodes()[0].get_leafnodes().values_list('pk', flat=True)
+			leaf_pk_list += root_node.get_leafnodes().values_list('pk', flat=True)
 		
 		if self.value() == 'yes':
 			# filters items in that have a primary key in the list of primary
