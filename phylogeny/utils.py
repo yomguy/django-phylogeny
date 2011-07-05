@@ -72,7 +72,7 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 		None:  the default merge strategy is to abort import, leaving existing
 			taxa alone and rolling back all partially-imported taxa.
 	'''
-	from phylogeny.models import Taxon, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
+	from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
 	
 	# establish baseline default values for new taxon
 	defaults = {
@@ -120,11 +120,12 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 				taxonomy_database, c = TaxonomyDatabase.objects.get_or_create(name=taxonomy.id.provider, slug=taxonomy_database_slug)
 				taxonomy_record, c = TaxonomyRecord.objects.get_or_create(taxon=taxon, database=taxonomy_database, record_id=taxonomy.id.value, url=taxonomy.uri)
 		for distribution in clade.distributions:
-			distribution_point, c = DistributionPoint.objects.create(taxon=taxon, place_name=distribution.desc)
+			if distribution.desc and not distribution.points:
+				taxon.distribution = u'%s %s' % (taxon.distribution or '', distribution.desc)
 			for point in distribution.points:
-				distribution_point, c = DistributionPoint.objects.create(taxon=taxon, place_name=distribution.desc, latitude=point.lat, longitude=point.long)
+				distribution_point = DistributionPoint.objects.create(taxon=taxon, place_name=distribution.desc, latitude=point.lat, longitude=point.long)
 		for reference in clade.references:
-			citation, c = Citation.objects.create(taxon=taxon, description=reference.desc, doi=reference.doi)
+			citation = Citation.objects.create(taxon=taxon, description=reference.desc, doi=reference.doi)
 	
 	# move taxon to parent (or root if no parent)
 	taxon.move_to(parent_taxon)
