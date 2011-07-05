@@ -1,23 +1,26 @@
 from django.contrib import admin
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from mptt import admin as mptt_admin
 
 from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImageCategory, TaxonImage
 
 
+ModelAdmin = admin.ModelAdmin
+TabularInline = admin.TabularInline
+StackedInline = admin.StackedInline
 # load modeltranslation admin classes if available
 # if not present, default admin classes are used
-try:
-	from modeltranslation import admin as modeltranslation_admin
-	ModelAdmin = modeltranslation_admin.TranslationAdmin
-	TabularInline = modeltranslation_admin.TranslationTabularInline
-	StackedInline = modeltranslation_admin.TranslationStackedInline
-except:
-	ModelAdmin = admin.ModelAdmin
-	TabularInline = admin.TabularInline
-	StackedInline = admin.StackedInline
+if 'modeltranslation' in settings.INSTALLED_APPS:
+	try:
+		from modeltranslation import admin as modeltranslation_admin
+		ModelAdmin = modeltranslation_admin.TranslationAdmin
+		TabularInline = modeltranslation_admin.TranslationTabularInline
+		StackedInline = modeltranslation_admin.TranslationStackedInline
+	except:
+		pass
 
 
 class CitationAdmin(StackedInline):
