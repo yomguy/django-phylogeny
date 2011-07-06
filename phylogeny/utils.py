@@ -211,12 +211,19 @@ def get_clade_for_taxon(taxon, parent_clade=None):
 	return clade
 
 
-def get_phylogeny(root_taxon):
+def get_phylogeny(root_taxon, flatten_to_format=None):
 	'''
 	Returns a new Phylogeny of clades from a Taxon instance.
+	
+	Optionally flattens to a string in format specified by `flatten_to_format`:
+	(`phyloxml`, `nexus`, `newick`) default None.
 	'''
 	clade = get_clade_for_taxon(root_taxon)
 	phylogeny = clade.to_phylogeny()
+	
+	if flatten_to_format:
+		return phylogeny.format(flatten_to_format)
+	
 	return phylogeny
 
 
