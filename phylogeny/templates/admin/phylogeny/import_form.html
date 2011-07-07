@@ -1,6 +1,55 @@
-{% extends 'admin/change_form.html' %}
-{% load i18n %}
+{% extends 'admin/base_site.html' %}
+{% load i18n adminmedia %}
+{% load url from future %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />{% endblock %}
+
+{% block title %}{% trans 'Import Phylogeny' %}{% endblock %}
 
 {% block content %}
-	content
+	<form{% if form.is_multipart %} enctype="multipart/form-data"{% endif %} action="{{ form_url }}" method="post" id="phylogeny_import_form">
+		{% csrf_token %}
+		{% block form_top %}
+		  <p>{% trans 'Select a phylogeny file for upload and specify its format.' %}</p>
+		{% endblock %}
+		<div>
+			{% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+			{% if form.errors %}
+			<p class="errornote">
+				{% blocktrans count form.errors|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+			</p>
+			{{ form.non_field_errors }}
+			{% endif %}
+
+			<fieldset class="module aligned">
+				{% comment %}<h2>{% trans 'Import Phylogeny' %}</h2>{% endcomment %}
+				{% for field in form %}
+					<div class="form-row{% if field.errors %} errors{% endif %}">
+						<div class="field-box{% if not field.is_readonly and field.errors %} errors{% endif %}">
+							{% if not field.is_readonly %}{{ field.errors }}{% endif %}
+							{% if field.is_checkbox %}
+								{{ field }}
+								{{ field.label_tag }}
+							{% else %}
+								{{ field.label_tag }}
+								{% if field.is_readonly %}
+									<p>{{ field.contents }}</p>
+								{% else %}
+									{{ field }}
+								{% endif %}
+							{% endif %}
+							{% if field.help_text %}
+								<p class="help">{{ field.help_text|safe }}</p>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+			</fieldset>
+
+			<div class="submit-row">
+				<input type="submit" value="{% trans 'Import' %}" class="default" />
+				<input type="button" value="{% trans 'Cancel' %}" onclick="window.close(); return false;" />
+			</div>
+		</div>
+	</form>
 {% endblock %}

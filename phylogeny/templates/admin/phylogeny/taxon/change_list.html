@@ -1,0 +1,7 @@
+{% extends 'admin/mptt_change_list.html' %}
+{% load i18n %}
+
+{% block object-tools-items %}
+	{{ block.super }}
+	<li><a href="{% url admin:phylogeny:import %}" class="addlink" onclick="return showAddAnotherPopup(this);">{% trans 'Import phylogeny' %}&hellip;</a></li>
+{% endblock %}

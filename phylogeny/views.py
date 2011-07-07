@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import FormView
 from django import forms
+from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
 from phylogeny.models import Taxon
@@ -78,5 +79,12 @@ class PhylogenyAdminImportView(FormView):
 				form._errors['file_field'] = form.error_class([_('An error occurred during import.  Please verify the file format and file contents.  If the error persists, try importing a different file or format.')])
 				return self.render_to_response({'form': form})
 		
-		return super(PhylogenyAdminImportView, self).post(request, *args, **kwargs)
+		messages.success(request, _('Successfully imported phylogeny.'))
+		
+		return HttpResponse('''
+			<script type="text/javascript">
+				opener.location=opener.location;
+				window.close();
+			</script>
+		''')
 
