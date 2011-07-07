@@ -14,9 +14,9 @@ class TaxonomyDatabaseManager(Manager):
 
 
 class TaxonomyRecordManager(Manager):
-	def get_by_natural_key(self, record_id, database_slug):
+	def get_by_natural_key(self, record_id, database_slug, taxon_slug):
 		from phylogeny.models import TaxonomyDatabase
-		return self.get(record_id=record_id, database=TaxonomyDatabase.objects.get_by_natural_key(database_slug))
+		return self.get(record_id=record_id, database=TaxonomyDatabase.objects.get_by_natural_key(database_slug), taxon=Taxon.objects.get_by_natural_key(taxon_slug))
 
 
 class DistributionPointManager(Manager):

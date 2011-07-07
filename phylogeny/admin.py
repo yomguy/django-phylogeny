@@ -1,11 +1,15 @@
+from functools import update_wrapper
+
 from django.contrib import admin
 from django.db.models import Q
+from django.conf.urls.defaults import patterns, url, include
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from mptt import admin as mptt_admin
 
 from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImageCategory, TaxonImage
+from phylogeny.views import PhylogenyAdminImportView
 
 
 ModelAdmin = admin.ModelAdmin
@@ -97,6 +101,7 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 	prepopulated_fields = {'slug': ('name',)}
 	save_on_top = True
 	inlines = (CitationAdmin, TaxonImageAdmin, DistributionPointAdmin, TaxonomyRecordAdmin,)
+	change_list_template = ''
 	fieldsets = (
 		(None, {
 			'classes': ('wide',),
@@ -122,6 +127,27 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 			'fields': (('branch_length', 'parent',),)
 		})
 	)
+	
+	def get_urls(self):
+		'''
+		Adds custom admin URLs for taxon management.
+		'''
+		def wrap(view):
+			def wrapper(*args, **kwargs):
+				return self.admin_site.admin_view(view)(*args, **kwargs)
+			return update_wrapper(wrapper, view)
+			
+		urls = super(TaxonAdmin, self).get_urls()
+		
+		base_taxon_admin_urls = patterns('',
+			url(_(r'^import/$'), wrap(PhylogenyAdminImportView.as_view()), name='import'),
+		)
+		
+		taxon_admin_urls = patterns('',
+			url(r'^', include(base_taxon_admin_urls, namespace='phylogeny')),
+		)
+		
+		return taxon_admin_urls + urls
 
 
 admin.site.register(TaxonomyDatabase, TaxonomyDatabaseAdmin)

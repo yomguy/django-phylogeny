@@ -145,13 +145,13 @@ def sort_dependencies(app_list):
             # Now add a dependency for any FK or M2M relation with
             # a model that defines a natural key
             for field in model._meta.fields:
-                # Normally, Django would see MPTT models' 'parent' field as a
+				# Normally, Django would see MPTT models' 'parent' field as a
 				# circular dependency with self making it incompatible with
 				# natural keys.  This patch skips over fields named 'parent'
 				# to prevent the field from triggering a self-dependency.  The
-				# model will deserialize correctly even with natural keys and
-				# a foreign key to self since the MPTT TreeManager returns 
-				# querysets in depth-first order.
+				# model will serialize correctly even with natural keys and
+				# a foreign key to self since the MPTT manager returns querysets
+				# in depth-first order.
                 if hasattr(field.rel, 'to') and field.name != 'parent':
                     rel_model = field.rel.to
                     if hasattr(rel_model, 'natural_key'):

@@ -18,20 +18,6 @@ class Command(BaseCommand):
 			default='phyloxml',
 			help=_('A file format supported by Biopython for the exported phylogenetic tree ("phyloxml", "nexus", or "newick")')
 		),
-		make_option(
-			'--strategy',
-			'-s',
-			dest='strategy',
-			default=None,
-			help=_('''Merge conflicts can arise when an imported clade\'s name matches an existing taxon\'s name.  In the case of conflicts, a merge strategy is used.  The default merge strategy is to abort import, leaving existing taxa alone and rolling back all partially-imported taxa.
-				
-				Available merge strategies are:
-
-					"update":  move existing taxa into the new tree structure, leaving their field data unaffected.  This strategy is useful if you just need to update a phylogeny's tree structure. The existing children of moved taxa will be unlinked, which can leave orphaned root nodes in the database.  It may be necessary to perform manual cleanup of the orphaned taxa.
-
-					"create":  creates brand new taxa leaving existing taxa alone.
-				''')
-		),
 	)
 	
 	def handle(self, *args, **options):
@@ -41,8 +27,8 @@ class Command(BaseCommand):
 			raise CommandError(_('Phylogeny path missing. For more information type:\npython manage.py help import-phylogeny'))
 		
 		try:
-			import_phylogeny(path=path, format=options['format'], merge_strategy=options['strategy'])
-			self.stdout.write(_('Successfully imported tree from "%(path)s" in format "%(format)s" with merge strategy "%(strategy)s"\n') % {'path': path, 'format': options['format'], 'strategy': options['strategy']})
+			import_phylogeny(path=path, format=options['format'])
+			self.stdout.write(_('Successfully imported tree from "%(path)s" in format "%(format)s"\n') % {'path': path, 'format': options['format']})
 		except PhylogenyImportMergeConflict as exception:
 			raise CommandError(u'%s' % exception)
 

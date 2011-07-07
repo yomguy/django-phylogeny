@@ -26,6 +26,11 @@ TAXON_IMAGE_KIND_CHOICES = (
 	('photo', _('photograph'),),
 	('illustration', _('illustration'),),
 )
+PHYLOGENY_IMPORT_FILE_FORMAT_CHOICES = (
+	('phyloxml', _('PhyloXML'),),
+	('nexus', _('Nexus'),),
+	('newick', _('Newick'),),
+)
 
 
 # default field values
@@ -34,3 +39,4 @@ TAXON_BODY_LENGTH_UNIT_DEFAULT = 'mm'
 TAXON_APPEARANCE_DATE_UNIT_DEFAULT = 'mya'
 TAXON_SOCIAL_UNIT_DEFAULT = ''
 TAXON_IMAGE_KIND_DEFAULT = ''
+PHYLOGENY_IMPORT_FILE_FORMAT_DEFAULT_CHOICE = PHYLOGENY_IMPORT_FILE_FORMAT_CHOICES[0][0]
