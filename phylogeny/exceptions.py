@@ -4,3 +4,12 @@ class PhylogenyImportMergeConflict(Exception):
 	strategy could not resolve it.
 	"""
 	pass
+
+
+class PhylogenyImportNameConflict(Exception):
+	'''
+	A name conflict occurred during a phylogeny name scan.  Two or more clades
+	have the same name within the phylogeny.
+	'''
+	pass
+

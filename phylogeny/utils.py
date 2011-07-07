@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify
 
 from Bio.Phylo import PhyloXML, write, parse
 
-from phylogeny.exceptions import PhylogenyImportMergeConflict
+from phylogeny.exceptions import PhylogenyImportMergeConflict, PhylogenyImportNameConflict
 
 
 def get_taxon_image_upload_to(instance, filename):
@@ -47,8 +47,19 @@ def slugify_unique(value, model, slugfield='slug'):
 		suffix += 1
 
 
-@transaction.commit_on_success
-def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
+def get_taxon_name_from_clade(clade):
+	'''
+	Generates a name suitable for use by a taxon from the given clade.
+	'''
+	# base name
+	taxon_name = clade.name or 'none'
+	# sometimes the name can be in a taxonomy, but not the clade itself
+	if hasattr(clade, 'taxonomies') and len(clade.taxonomies) > 0 and hasattr(clade.taxonomies[0], 'scientific_name'):
+		taxon_name = clade.taxonomies[0].scientific_name or taxon_name
+	return taxon_name
+
+
+def get_taxon_for_clade(clade, parent_taxon=None):
 	'''
 	Imports data from a phylogeny and saves taxa to the database.
 	
@@ -58,27 +69,24 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 	rolling back all partially-imported taxa.
 	
 	Available merge strategies are:
-	
-		"update":  move existing taxa into the new tree structure, leaving their
-			field data unaffected.  This strategy is useful if you just need to
-			update a phylogeny's tree structure.
-			
-			The existing children of moved taxa will be unlinked, which can
-			leave orphaned root nodes in the database.  It may be necessary to
-			perform manual cleanup of the orphaned taxa.
-		
-		"create":  creates brand new taxa leaving existing taxa alone.
 		
 		None:  the default merge strategy is to abort import, leaving existing
 			taxa alone and rolling back all partially-imported taxa.
 	'''
 	from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
 	
-	# establish baseline default values for new taxon
+	# merge strategy None is the only supported strategy at this time
+	merge_strategy = None
+	
+	taxon_name = get_taxon_name_from_clade(clade)
+	
 	defaults = {
-		'name': clade.name,
-		'slug': slugify_unique(clade.name, Taxon),
+		'name': taxon_name,
+		'slug': slugify_unique(taxon_name, Taxon)
 	}
+	
+	if hasattr(clade, 'branch_length'):
+		defaults['branch_length'] = clade.branch_length
 	
 	# add clade date to taxon defaults if available
 	# NOTE:  date output is disabled since Biopython can't read its own output
@@ -93,49 +101,46 @@ def get_taxon_for_clade(clade, parent_taxon=None, merge_strategy=None):
 	#	if hasattr(clade.date, 'maximum'):
 	#		defaults['appearance_date_max_value'] = clade.date.maximum
 	
-	# get or create a taxon matching root_clade.name
-	taxon, created = Taxon.objects.get_or_create(slug=slugify(clade.name or ''), defaults=defaults)
+	# get or create a taxon matching taxon_name
+	lookup_slug = slugify(taxon_name)
+	if taxon_name == 'none':
+		lookup_slug = slugify_unique(taxon_name, Taxon)
+	
+	taxon, created = Taxon.objects.get_or_create(slug=lookup_slug, defaults=defaults)
 	
 	# None merge strategy
 	if merge_strategy is None and not created:
 		# merge strategy is None or other:
-		raise PhylogenyImportMergeConflict(_('Merge conflict occurred using merge strategy None:  taxon with slug "%(taxon_slug)s" already exists.  Import aborted.') % {'taxon_slug': taxon.slug})
+		raise PhylogenyImportMergeConflict(_('Merge conflict occurred:  name "%(taxon_name)s" already exists.  Import aborted.  This may be caused by two clades having the same name in the phylogeny file or by a clade having the same name as an existing taxon.  Please change the name of the existing taxon or change the name of the taxon in the import file.') % {'taxon_name': taxon.name})
 	
-	# "update" merge strategy
-	if merge_strategy == 'update' and not created:
-		# unlink taxon's children (in effect orphaning them)
-		for child in taxon.get_children():
-			child.move_to(None)
-	
-	# "create" merge strategy
-	if merge_strategy == 'create' and not created:
-		# create a new taxon
-		taxon = Taxon.objects.create(**defaults)
-	
-	if merge_strategy == 'create':
+	if created:
+		taxon.save()
 		# import taxonomies, distributions, and references
-		for taxonomy in clade.taxonomies:
-			if taxonomy.id and taxonomy.id.value and taxonomy.id.provider:
-				taxonomy_database_slug = slugify_unique(taxonomy.id.provider, TaxonomyDatabase)
-				taxonomy_database, c = TaxonomyDatabase.objects.get_or_create(name=taxonomy.id.provider, slug=taxonomy_database_slug)
-				taxonomy_record, c = TaxonomyRecord.objects.get_or_create(taxon=taxon, database=taxonomy_database, record_id=taxonomy.id.value, url=taxonomy.uri)
-		for distribution in clade.distributions:
-			if distribution.desc and not distribution.points:
-				taxon.distribution = u'%s %s' % (taxon.distribution or '', distribution.desc)
-			for point in distribution.points:
-				distribution_point = DistributionPoint.objects.create(taxon=taxon, place_name=distribution.desc, latitude=point.lat, longitude=point.long)
-		for reference in clade.references:
-			citation = Citation.objects.create(taxon=taxon, description=reference.desc, doi=reference.doi)
+		if hasattr(clade, 'taxonomies'):
+			for taxonomy in clade.taxonomies:
+				if taxonomy.id and taxonomy.id.value and taxonomy.id.provider:
+					taxonomy_database_slug = slugify(taxonomy.id.provider)
+					taxonomy_database, c = TaxonomyDatabase.objects.get_or_create(name=taxonomy.id.provider, slug=taxonomy_database_slug)
+					taxonomy_record, c = TaxonomyRecord.objects.get_or_create(taxon=taxon, database=taxonomy_database, record_id=taxonomy.id.value)
+		if hasattr(clade, 'distributions'):
+			for distribution in clade.distributions:
+				if distribution.desc and not distribution.points:
+					taxon.distribution = u'%s %s' % (distribution.desc, taxon.distribution)
+				for point in distribution.points:
+					distribution_point = DistributionPoint.objects.create(taxon=taxon, place_name=distribution.desc or '', latitude=point.lat, longitude=point.long)
+		if hasattr(clade, 'references'):
+			for reference in clade.references:
+				citation = Citation.objects.create(taxon=taxon, description=reference.desc or '', doi=reference.doi or '')
 	
 	# move taxon to parent (or root if no parent)
 	taxon.move_to(parent_taxon)
 	
 	for child_clade in clade.clades:
-		get_taxon_for_clade(child_clade, parent_taxon=taxon, merge_strategy=merge_strategy)
+		get_taxon_for_clade(child_clade, parent_taxon=taxon)
 	
 	return taxon
 
-
+@transaction.commit_on_success
 def get_clade_for_taxon(taxon, parent_clade=None):
 	'''
 	Marshals data from taxon and its children recursively to new Clade(s).
@@ -237,14 +242,13 @@ def export_phylogeny(root_taxon, path=None, format='phyloxml'):
 	write(phylogeny, path, format)
 
 
-def import_phylogeny(path=None, format='phyloxml', merge_strategy=None):
+@transaction.commit_on_success
+def import_phylogeny(path=None, format='phyloxml'):
 	'''
 	Imports phylogenetic tree(s) from `path` in the specified format
-	(`phyloxml`, `nexus`, `newick`) default `phyloxml`.  Merge conflicts are
-	resolved using the merge strategy specified by `merge_strategy`.  See
-	`get_taxon_for_clade` for more information about merge strategies.
+	(`phyloxml`, `nexus`, `newick`) default `phyloxml`.
 	'''
 	trees = parse(path, format)
 	for tree in trees:
-		get_taxon_for_clade(tree.root, merge_strategy=merge_strategy)
+		get_taxon_for_clade(tree.root)
 

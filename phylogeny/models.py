@@ -169,13 +169,13 @@ class TaxonomyRecord(models.Model):
 	class Meta:
 		verbose_name = _('taxonomy record')
 		verbose_name_plural = _('taxonomy records')
-		unique_together = ('database', 'record_id',)
+		unique_together = ('taxon', 'database', 'record_id',)
 	
 	def __unicode__(self):
 		return u'%s %s' % (self.database, self.record_id,)
 	
 	def natural_key(self):
-		return (self.record_id,) + self.database.natural_key()
+		return (self.record_id,) + self.database.natural_key() + self.taxon.natural_key()
 
 
 class DistributionPoint(models.Model):
