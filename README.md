@@ -53,14 +53,20 @@ Django Phylogeny supports multiple languages and automatically integrates with [
 1. Install django-modeltranslation into your Python path.
 2. Place `modeltranslation` into `INSTALLED_APPS` in `settings.py`.  Be sure to place this app _before_ `phylogeny`.
 3. Add a `translation.py` file to your project folder with at least the following:
+	
 	from phylogeny import translation
+	
 4. Let django-modeltranslation know about your translations by adding to `settings.py`:
+	
 	MODELTRANSLATION_TRANSLATION_REGISTRY = 'trees.translation'
+	
 5. Specify which languages to enable as you normally would in the `LANGUAGES` setting.  For example:
+	
 	LANGUAGES = (
 		('en', 'English'),
 		('pt-br', 'Brazilian Portuguese'),
 		('es', 'Spanish'),
 	)
+	
 
 **Caution**:  django-modeltranslation alters fields on Django Phylogeny models at runtime.  If you intend to use Django Phylogeny with translatable fields, be sure to setup both django-modeltranslation and Django Phylogeny _before_ running the first `syncdb` command.  Adding django-modeltranslation after syncing the database will result in runtime exceptions, since the admin will attempt to access extra fields that don't exist in your database.  If you want to install django-modeltranslation to an existing project, you will need a schema migration tool such as [django-south](http://south.aeracode.org/docs/).  Schema migration is beyond the scope of this documentation.
