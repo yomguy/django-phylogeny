@@ -14,6 +14,9 @@ Requirements:
  - Biopython 1.57 or newer
  - Django MPTT
 
+Optional:
+ - Django modeltranslation app:  if present, Django Phylogeny will use modeltranslation to enable translations of plain-text fields
+
 You can obtain Python from http://www.python.org/, Django from
 http://www.djangoproject.com/, Biopython from http://biopython.org/, and
 Django MPTT from https://github.com/django-mptt/django-mptt.
