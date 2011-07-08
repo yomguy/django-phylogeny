@@ -26,7 +26,7 @@ You may wish to clone the development version of the repository to receive the l
 	cd django-phylogeny
 	git checkout -t -b develop origin/develop
 
-Add the django-phylogeny/phylogeny/ folder to your `PYTHONPATH`.
+Add the django-phylogeny/ folder to your `PYTHONPATH`.
 
 
 ## Requirements
