@@ -82,7 +82,8 @@ def get_taxon_for_clade(clade, parent_taxon=None):
 	
 	defaults = {
 		'name': taxon_name,
-		'slug': slugify_unique(taxon_name, Taxon)
+		'slug': slugify_unique(taxon_name, Taxon),
+		'branch_length': 1.0
 	}
 	
 	if hasattr(clade, 'branch_length'):
@@ -198,7 +199,7 @@ def get_clade_for_taxon(taxon, parent_clade=None):
 	
 	# create new clade
 	clade = PhyloXML.Clade(
-		branch_length=taxon.branch_length,
+		branch_length=taxon.branch_length or 1.0,
 		name=taxon.name,
 		date=date,
 		taxonomies=taxonomies,
