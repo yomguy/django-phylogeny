@@ -4,6 +4,7 @@
 {% block object-tools-items %}
 	{{ block.super }}
 	{% if change %}
+		<li><a href="{% url admin:phylogeny:visualize slug=original.slug %}" class="exportlink" onclick="return showAddAnotherPopup(this);">{% trans 'Visualize' %}</a></li>
 		<li><a href="{{ original.get_export_phyloxml_absolute_url }}" class="exportlink">{% trans 'Export PhyloXML' %}</a></li>
 		<li><a href="{{ original.get_export_nexus_absolute_url }}" class="exportlink">{% trans 'Export Nexus' %}</a></li>
 		<li><a href="{{ original.get_export_newick_absolute_url }}" class="exportlink">{% trans 'Export Newick' %}</a></li>
