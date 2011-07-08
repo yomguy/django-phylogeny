@@ -12,7 +12,7 @@ Official releases are available at:
 	
 	https://github.com/randallmorey/django-phylogeny
 
-Download the distribution archive, unarchive it, and run:
+Download the latest distribution archive, unarchive it, and run:
 
    python setup.py install
 
