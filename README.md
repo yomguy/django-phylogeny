@@ -22,7 +22,7 @@ Download the latest distribution archive, unarchive it, and run:
 
 You may wish to clone the development version of the repository to receive the latest and greatest.  Please note that the development version may be unstable and should not be used in production.
 
-	git clone https://github.com/gregplaysguitar/django-phylogeny.git
+	git clone https://github.com/randallmorey/django-phylogeny.git
 	cd django-phylogeny
 	git checkout develop
 
