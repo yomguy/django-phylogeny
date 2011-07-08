@@ -1,0 +1,43 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n adminmedia %}
+{% load url from future %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />{% endblock %}
+
+{% block title %}{% trans 'Visualize Phylogeny' %}{% endblock %}
+
+{% block content %}
+	<form action="." method="get">
+		<div class="submit-row">
+			<input type="button" value="{% trans 'Close' %}" onclick="window.close(); return false;" />
+		</div>
+	</form>
+	
+	<div id="svgCanvas"></div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>
+	<script src="{{ STATIC_URL }}js/jsphylosvg-1.53/raphael-min.js"></script>
+	<script src="{{ STATIC_URL }}js/jsphylosvg-1.53/jsphylosvg.js"></script>
+	
+	<script>
+		(function () {
+			$(function () {
+				$.ajax({
+					url: '{{ object.get_export_phyloxml_absolute_url }}',
+					dataType: 'xml',
+					success: function (data) {
+						new Smits.PhyloCanvas(
+							{
+								phyloxml: data,
+								fileSource: true
+							},
+							'svgCanvas',	// Div Id where to render
+							800, 800,		// Height, Width in pixels
+							'circular'
+						);
+					}
+				});
+			});
+		}());
+	</script>
+{% endblock %}

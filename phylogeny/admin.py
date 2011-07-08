@@ -9,7 +9,7 @@ from django.conf import settings
 from mptt import admin as mptt_admin
 
 from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImageCategory, TaxonImage
-from phylogeny.views import PhylogenyAdminImportView
+from phylogeny.views import PhylogenyAdminVisualizeView, PhylogenyAdminImportView
 
 
 ModelAdmin = admin.ModelAdmin
@@ -140,6 +140,7 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 		urls = super(TaxonAdmin, self).get_urls()
 		
 		base_taxon_admin_urls = patterns('',
+			url(_(r'^visualize/(?P<slug>[-\w]+)/$'), wrap(PhylogenyAdminVisualizeView.as_view()), name='visualize'),
 			url(_(r'^import/$'), wrap(PhylogenyAdminImportView.as_view()), name='import'),
 		)
 		

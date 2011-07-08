@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.views.generic.detail import BaseDetailView
+from django.views.generic.detail import BaseDetailView, DetailView
 from django.views.generic.edit import FormView
 from django import forms
 from django.contrib import messages
@@ -9,6 +9,21 @@ from phylogeny.models import Taxon
 from phylogeny.forms import PhylogenyImportForm
 from phylogeny.exceptions import PhylogenyImportMergeConflict
 from phylogeny.utils import get_phylogeny, import_phylogeny
+
+
+class PhylogenyAdminVisualizeView(DetailView):
+	'''
+	Renders a visualization of a phylogeny rooted on the given taxon.
+	'''
+	template_name = 'admin/phylogeny/visualize.html'
+	queryset = Taxon.objects.all()
+	
+	def render_to_response(self, context, **kwargs):
+		'''
+		Renders a phylogeny import form.
+		'''
+		context.update({'is_popup': True})
+		return super(PhylogenyAdminVisualizeView, self).render_to_response(context)
 
 
 class PhylogenyExportView(BaseDetailView):
