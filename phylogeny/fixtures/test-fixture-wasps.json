@@ -1,0 +1,708 @@
+[
+    {
+        "pk": 1, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 26, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "kingdom", 
+            "lft": 1, 
+            "common_name": "animals", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": null, 
+            "appearance_date_max_value": null, 
+            "slug": "animalia", 
+            "branch_length": 1.0, 
+            "name": "Animalia", 
+            "date_modified": "2011-07-05 12:56:32", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 0, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 12:56:32", 
+            "distribution": "Worldwide."
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 25, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "phylum", 
+            "lft": 2, 
+            "common_name": "arthropods", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "animalia"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "arthropoda", 
+            "branch_length": 1.0, 
+            "name": "Arthropoda", 
+            "date_modified": "2011-07-05 12:57:58", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 1, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 12:57:49", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 24, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "subphylum", 
+            "lft": 3, 
+            "common_name": "hexapods", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "arthropoda"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "hexapoda", 
+            "branch_length": 1.0, 
+            "name": "Hexapoda", 
+            "date_modified": "2011-07-05 12:58:28", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 2, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 12:58:28", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 23, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "class", 
+            "lft": 4, 
+            "common_name": "insects", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "hexapoda"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "insecta", 
+            "branch_length": 1.0, 
+            "name": "Insecta", 
+            "date_modified": "2011-07-05 12:59:17", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 3, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 12:59:09", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 22, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "subclass", 
+            "lft": 5, 
+            "common_name": "winged insects", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "insecta"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "pterygota", 
+            "branch_length": 1.0, 
+            "name": "Pterygota", 
+            "date_modified": "2011-07-05 12:59:56", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 4, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 12:59:56", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 21, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "infraclass", 
+            "lft": 6, 
+            "common_name": "modern wing-folding insects", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "pterygota"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "neoptera", 
+            "branch_length": 1.0, 
+            "name": "Neoptera", 
+            "date_modified": "2011-07-05 13:00:40", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 5, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:00:34", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 20, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "order", 
+            "lft": 7, 
+            "common_name": "ants, bees, and wasps", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "neoptera"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "hymenoptera", 
+            "branch_length": 1.0, 
+            "name": "Hymenoptera", 
+            "date_modified": "2011-07-05 13:01:24", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 6, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:01:15", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 19, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "suborder", 
+            "lft": 8, 
+            "common_name": "narrow-waisted hymenopterans", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "hymenoptera"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "apocrita", 
+            "branch_length": 1.0, 
+            "name": "Apocrita", 
+            "date_modified": "2011-07-05 13:02:15", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 7, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:02:06", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 18, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "", 
+            "lft": 9, 
+            "common_name": "", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "apocrita"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "aculeata", 
+            "branch_length": 1.0, 
+            "name": "Aculeata", 
+            "date_modified": "2011-07-05 13:03:35", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 8, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:03:35", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 17, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "superfamily", 
+            "lft": 10, 
+            "common_name": "vespoid wasps", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "aculeata"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "vespoidea", 
+            "branch_length": 1.0, 
+            "name": "Vespoidea", 
+            "date_modified": "2011-07-05 13:04:19", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 9, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:04:06", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 16, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "family", 
+            "lft": 11, 
+            "common_name": "hornets, paper wasps, potter wasps, yellowjackets", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "vespoidea"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "vespidae", 
+            "branch_length": 1.0, 
+            "name": "Vespidae", 
+            "date_modified": "2011-07-05 13:04:58", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 10, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:04:58", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 15, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "genus", 
+            "lft": 12, 
+            "common_name": "", 
+            "description": "", 
+            "body_length_value": null, 
+            "social_unit_annotation": "", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "vespidae"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "vespa", 
+            "branch_length": 1.0, 
+            "name": "Vespa", 
+            "date_modified": "2011-07-05 13:05:51", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 11, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:05:51", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "phylogeny.taxon", 
+        "fields": {
+            "rght": 14, 
+            "ecology": "", 
+            "body_length_unit": "mm", 
+            "appearance_date_min_value": null, 
+            "color": "", 
+            "rank": "species", 
+            "lft": 13, 
+            "common_name": "european hornet", 
+            "description": "The European hornet Vespa crabro, commonly known simply as the \"hornet\", is the largest European eusocial wasp. The queen measures 25 to 50 mm (1\u20132 in) long; males and workers are smaller. In males, as in most members of the Aculeata, the antennae have 13 segments, while in females there are only 12; also as in other aculeates, the male abdomen has seven visible segments, while the female has six; females possess an ovipositor modified into a sting which is not barbed. See wasp and bee characteristics to help identify similar insects.\r\n\r\nThis species is not particularly aggressive except when defending the nest, therefore care must be taken when in its proximity, as the stings are quite painful. As with most stinging insects, European hornets will sting in self-defense when grabbed or stepped on.", 
+            "body_length_value": 38, 
+            "social_unit_annotation": "European hornets are eusocial.", 
+            "author": "", 
+            "tagline": "", 
+            "tree_id": 1, 
+            "social_unit_size_min": null, 
+            "social_unit_type": "colony", 
+            "social_unit_size_max": null, 
+            "parent": [
+                "vespa"
+            ], 
+            "appearance_date_max_value": null, 
+            "slug": "vespa-crabro", 
+            "branch_length": 1.0, 
+            "name": "Vespa crabro", 
+            "date_modified": "2011-07-05 13:12:34", 
+            "year_of_description": null, 
+            "appearance_date_unit": "mya", 
+            "level": 12, 
+            "appearance_date_annotation": "", 
+            "date_created": "2011-07-05 13:06:24", 
+            "distribution": ""
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "phylogeny.citation", 
+        "fields": {
+            "url": "http://en.wikipedia.org/wiki/Animal", 
+            "doi": "", 
+            "description": "Wikipedia entry for \"Animal\"", 
+            "taxon": [
+                "animalia"
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "phylogeny.citation", 
+        "fields": {
+            "url": "http://en.wikipedia.org/wiki/European_hornet", 
+            "doi": "", 
+            "description": "Wikipedia entry for \"European Hornet\"", 
+            "taxon": [
+                "vespa-crabro"
+            ]
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "phylogeny.taxonomydatabase", 
+        "fields": {
+            "url": "http://www.itis.gov/", 
+            "name": "ITIS", 
+            "slug": "itis"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "202423", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=202423", 
+            "taxon": [
+                "animalia"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "82696", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=82696", 
+            "taxon": [
+                "arthropoda"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "563886", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=563886", 
+            "taxon": [
+                "hexapoda"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "99208", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=99208", 
+            "taxon": [
+                "insecta"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "100500", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=100500", 
+            "taxon": [
+                "pterygota"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "563890", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=563890", 
+            "taxon": [
+                "neoptera"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "152741", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=152741", 
+            "taxon": [
+                "hymenoptera"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "152864", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=152864", 
+            "taxon": [
+                "apocrita"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "709253", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=709253", 
+            "taxon": [
+                "aculeata"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "154248", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=154248", 
+            "taxon": [
+                "vespoidea"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "154249", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=154249", 
+            "taxon": [
+                "vespidae"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "154272", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=154272", 
+            "taxon": [
+                "vespa"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "phylogeny.taxonomyrecord", 
+        "fields": {
+            "record_id": "154273", 
+            "url": "http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=154273", 
+            "taxon": [
+                "vespa-crabro"
+            ], 
+            "database": [
+                "itis"
+            ]
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "phylogeny.distributionpoint", 
+        "fields": {
+            "latitude": 1.0, 
+            "taxon": [
+                "animalia"
+            ], 
+            "longitude": -1.0, 
+            "place_name": "worldwide"
+        }
+    }
+]

@@ -1,0 +1,22 @@
+Thanks for downloading Django Phylogeny
+
+To install, run the following command inside this directory:
+
+	python setup.py install
+
+Or if you'd prefer, you can simply place the included ``phylogeny`` directory
+somewhere on your PYTHONPATH, or symlink to it from somewhere on your
+PYTHONPATH; this is useful if you're working from a git checkout.
+
+Requirements:
+ - Python 2.6 or newer
+ - Django 1.3 or newer
+ - Biopython 1.57 or newer
+ - Django MPTT
+
+Optional:
+ - Django modeltranslation app:  if present, Django Phylogeny will use modeltranslation to enable translations of plain-text fields
+
+You can obtain Python from http://www.python.org/, Django from
+http://www.djangoproject.com/, Biopython from http://biopython.org/, and
+Django MPTT from https://github.com/django-mptt/django-mptt.
