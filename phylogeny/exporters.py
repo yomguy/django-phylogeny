@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
+from inspect import isclass
 
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
@@ -6,10 +7,67 @@ from django.utils.translation import ugettext_lazy as _
 from Bio import Phylo
 
 from phylogeny.models import Taxon
-from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment
+from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound
 
 
-class AbstractBasePhyloExporter:
+class ExporterRegistry(object):
+	'''
+	Registers exporters and reports on exporter availability.  Registered
+	exporter classes are listed in the list returned
+	by `get_registered_exporters`.
+	
+	Exporter classes may register with a Registry instance:
+		`registry.register(ExporterClass)`
+	'''
+	def __init__(self):
+		self._registry = set()
+	
+	def register(self, exporter_class):
+		'''Register an exporter class.'''
+		if not isclass(exporter_class):
+			raise PhyloExporterRegistryOnlyClassesMayRegister(ugettext('Only classes may register with the exporter registry.  %s is not a class.') % exporter_class)
+		if exporter_class in self._registry:
+			raise PhyloExporterRegistryClassAlreadyRegistered(ugettext('Exporter classes may register only once.  %s is alredy registered.') % exporter_class)
+		
+		# instantiate exporter class so as to raise any errors which would
+		# otherwise appear only upon later instantiation
+		exporter_class()
+		
+		self._registry.add(exporter_class)
+	
+	def choices(self):
+		'''
+		Returns a two-tuple of exporter format names and verbose names,suitable
+		for use with the `choices` option in some model and form fields.
+		'''
+		choices = tuple((exporter.format_name, exporter.verbose_name) for exporter in self._registry)
+		return choices
+	
+	def extensions(self):
+		'''Returns a tuple of exporter extensions.'''
+		extensions = tuple(exporter.extension for exporter in self._registry)
+		return extensions
+	
+	def get_by_format_name(self, format_name):
+		'''
+		Returns an instance of the first exporter with a matching format name.
+		'''
+		for exporter in self._registry:
+			if exporter.format_name == format_name:
+				return exporter()
+		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with format name %s not found.') % format_name)
+	
+	def get_by_extension(self, extension):
+		'''
+		Returns an instance of the first exporter with a matching extension.
+		'''
+		for exporter in self._registry:
+			if exporter.extension == extension:
+				return exporter()
+		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with extension %s not found.') % extension)
+	
+
+class AbstractBasePhyloExporter(object):
 	'''
 	Provides base functionality and method stubs for phylogeny exporters.
 	Subclasses must implement methods marked as abstract methods.
@@ -26,6 +84,12 @@ class AbstractBasePhyloExporter:
 		'''Initializes an instance of the phylogeny exporter.'''
 		self.taxon = taxon
 		self.export_to = export_to
+		
+		if self.format_name is None:
+			raise PhyloExporterMissingAttrbute(ugettext('Exporter %s missing `format_name`.') % self)
+		if self.extension is None:
+			raise PhyloExporterMissingAttribute(ugettext('Exporter %s missing `extension`.') % self)
+		
 		return super(AbstractBasePhyloExporter, self).__init__()
 	
 	def __repr__(self):
@@ -219,3 +283,11 @@ class NewickPhyloExporter(AbstractBaseBiopythonPhyloExporter):
 	format_name = 'newick'
 	extension = 'tree'
 	
+
+# registry is used to register exporter classes and report on them
+# throughouth the app
+exporter_registry = ExporterRegistry()
+# register concrete exporter classes
+exporter_registry.register(PhyloXMLPhyloExporter)
+exporter_registry.register(NexusPhyloExporter)
+exporter_registry.register(NewickPhyloExporter)
