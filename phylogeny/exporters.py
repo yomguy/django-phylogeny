@@ -37,7 +37,7 @@ class ExporterRegistry(object):
 	
 	def choices(self):
 		'''
-		Returns a two-tuple of exporter format names and verbose names,suitable
+		Returns a two-tuple of exporter format names and verbose names, suitable
 		for use with the `choices` option in some model and form fields.
 		'''
 		choices = tuple((exporter.format_name, exporter.verbose_name) for exporter in self._registry)
