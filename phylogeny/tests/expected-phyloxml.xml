@@ -1,0 +1,124 @@
+<phy:phyloxml xmlns:phy="http://www.phyloxml.org">
+  <phy:phylogeny rooted="true">
+	  <phy:clade>
+		  <phy:name>Animalia</phy:name>
+			<phy:branch_length>1.0</phy:branch_length>
+			<phy:taxonomy>
+			  <phy:id provider="ITIS">202423</phy:id>
+				<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=202423</phy:uri>
+			</phy:taxonomy>
+			<phy:distribution>
+			  <phy:desc>Worldwide.</phy:desc>
+			</phy:distribution>
+			<phy:distribution>
+			  <phy:desc>worldwide</phy:desc>
+				<phy:point geodetic_datum="WGS84">
+				  <phy:lat>1.0</phy:lat>
+					<phy:long>-1.0</phy:long>
+				</phy:point>
+			</phy:distribution>
+			<phy:reference doi="">
+			  <phy:desc>Wikipedia entry for "Animal" http://en.wikipedia.org/wiki/Animal</phy:desc>
+			</phy:reference>
+			<phy:clade>
+			  <phy:name>Arthropoda</phy:name>
+				<phy:branch_length>1.0</phy:branch_length>
+				<phy:taxonomy>
+				  <phy:id provider="ITIS">82696</phy:id>
+					<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=82696</phy:uri>
+				</phy:taxonomy>
+				<phy:clade>
+				  <phy:name>Hexapoda</phy:name>
+					<phy:branch_length>1.0</phy:branch_length>
+					<phy:taxonomy>
+					  <phy:id provider="ITIS">563886</phy:id>
+						<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=563886</phy:uri>
+					</phy:taxonomy>
+					<phy:clade>
+					  <phy:name>Insecta</phy:name>
+						<phy:branch_length>1.0</phy:branch_length>
+						<phy:taxonomy>
+						  <phy:id provider="ITIS">99208</phy:id>
+							<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=99208</phy:uri>
+						</phy:taxonomy>
+						<phy:clade>
+						  <phy:name>Pterygota</phy:name>
+							<phy:branch_length>1.0</phy:branch_length>
+							<phy:taxonomy>
+							  <phy:id provider="ITIS">100500</phy:id>
+								<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=100500</phy:uri>
+							</phy:taxonomy>
+							<phy:clade>
+							  <phy:name>Neoptera</phy:name>
+								<phy:branch_length>1.0</phy:branch_length>
+								<phy:taxonomy>
+								  <phy:id provider="ITIS">563890</phy:id>
+									<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=563890</phy:uri>
+								</phy:taxonomy>
+								<phy:clade>
+								  <phy:name>Hymenoptera</phy:name>
+									<phy:branch_length>1.0</phy:branch_length>
+									<phy:taxonomy>
+									  <phy:id provider="ITIS">152741</phy:id>
+										<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=152741</phy:uri>
+									</phy:taxonomy>
+									<phy:clade>
+									  <phy:name>Apocrita</phy:name>
+										<phy:branch_length>1.0</phy:branch_length>
+										<phy:taxonomy>
+										  <phy:id provider="ITIS">152864</phy:id>
+											<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=152864</phy:uri>
+										</phy:taxonomy>
+										<phy:clade>
+										  <phy:name>Aculeata</phy:name>
+											<phy:branch_length>1.0</phy:branch_length>
+											<phy:taxonomy>
+											  <phy:id provider="ITIS">709253</phy:id>
+												<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=709253</phy:uri>
+											</phy:taxonomy>
+											<phy:clade>
+											  <phy:name>Vespoidea</phy:name>
+												<phy:branch_length>1.0</phy:branch_length>
+												<phy:taxonomy>
+												  <phy:id provider="ITIS">154248</phy:id>
+													<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=154248</phy:uri>
+												</phy:taxonomy>
+												<phy:clade>
+												  <phy:name>Vespidae</phy:name>
+													<phy:branch_length>1.0</phy:branch_length>
+													<phy:taxonomy>
+													  <phy:id provider="ITIS">154249</phy:id>
+														<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=154249</phy:uri>
+													</phy:taxonomy>
+													<phy:clade>
+													  <phy:name>Vespa</phy:name>
+														<phy:branch_length>1.0</phy:branch_length>
+														<phy:taxonomy>
+														  <phy:id provider="ITIS">154272</phy:id>
+															<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=154272</phy:uri>
+														</phy:taxonomy>
+														<phy:clade>
+														  <phy:name>Vespa crabro</phy:name>
+															<phy:branch_length>1.0</phy:branch_length>
+															<phy:taxonomy>
+															  <phy:id provider="ITIS">154273</phy:id>
+																<phy:uri>http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=154273</phy:uri>
+															</phy:taxonomy>
+															<phy:reference doi="">
+															  <phy:desc>Wikipedia entry for "European Hornet" http://en.wikipedia.org/wiki/European_hornet</phy:desc>
+															</phy:reference>
+														</phy:clade>
+													</phy:clade>
+												</phy:clade>
+											</phy:clade>
+										</phy:clade>
+									</phy:clade>
+								</phy:clade>
+							</phy:clade>
+						</phy:clade>
+					</phy:clade>
+				</phy:clade>
+			</phy:clade>
+		</phy:clade>
+	</phy:phylogeny>
+</phy:phyloxml>

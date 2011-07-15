@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation import ugettext as _
 
 from phylogeny.models import Taxon
-from phylogeny.utils import export_phylogeny
+from phylogeny.exporters import PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter
 
 
 class Command(BaseCommand):
@@ -37,7 +37,20 @@ class Command(BaseCommand):
 			raise CommandError(_('File path missing'))
 		
 		try:
-			export_phylogeny(taxon, path=path, format=options['format'])
+			# TODO:  need a more elegant way to get exporter by format name (perhaps a manager that registers exporters?)
+			format = options['format']
+			if format == 'phyloxml':
+				exporter = PhyloXMLPhyloExporter()
+			elif format == 'nexus':
+				exporter = NexusPhyloExporter()
+			elif format == 'newick':
+				exporter = NewickPhyloExporter()
+			
+			exporter.taxon = taxon
+			exporter.export_to = path
+			exporter.save()
 			self.stdout.write(_('Successfully exported tree rooted on taxon "%(taxon_slug)s" to "%(path)s" in format "%(format)s"\n') % {'taxon_slug': taxon_slug, 'path': path, 'format': options['format']})
 		except:
 			raise CommandError(_('Failed exporting phylogeny to "%(path)s" in format "%(format)s"') % {'path': path, 'format': options['format']})
+	
+

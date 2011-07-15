@@ -16,7 +16,7 @@ class Command(BaseCommand):
 			'-f',
 			dest='format',
 			default='phyloxml',
-			help=_('A file format supported by Biopython for the exported phylogenetic tree ("phyloxml", "nexus", or "newick")')
+			help=_('A phylogeny file format supported by Biopython ("phyloxml", "nexus", or "newick")')
 		),
 	)
 	
