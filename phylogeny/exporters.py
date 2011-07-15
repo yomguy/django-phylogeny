@@ -285,7 +285,7 @@ class NewickPhyloExporter(AbstractBaseBiopythonPhyloExporter):
 	
 
 # registry is used to register exporter classes and report on them
-# throughouth the app
+# throughout the app
 exporter_registry = ExporterRegistry()
 # register concrete exporter classes
 exporter_registry.register(PhyloXMLPhyloExporter)
