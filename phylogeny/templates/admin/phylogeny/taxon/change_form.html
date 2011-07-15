@@ -1,12 +1,13 @@
 {% extends 'admin/change_form.html' %}
-{% load i18n %}
+{% load i18n phylogeny_export %}
 
 {% block object-tools-items %}
 	{{ block.super }}
 	{% if change %}
+		{% get_exporters as exporters %}
 		<li><a href="{% url admin:phylogeny:visualize slug=original.slug %}" class="exportlink" onclick="return showAddAnotherPopup(this);">{% trans 'Visualize' %}</a></li>
-		<li><a href="{% url phylogeny:export slug=original.slug ext='xml' %}" class="exportlink">{% trans 'Export PhyloXML' %}</a></li>
-		<li><a href="{% url phylogeny:export slug=original.slug ext='nex' %}" class="exportlink">{% trans 'Export Nexus' %}</a></li>
-		<li><a href="{% url phylogeny:export slug=original.slug ext='tree' %}" class="exportlink">{% trans 'Export Newick' %}</a></li>
+		{% for exporter in exporters %}
+			<li><a href="{% url phylogeny:export slug=original.slug ext=exporter.extension %}" class="exportlink">{{ exporter }}</a></li>
+		{% endfor %}
 	{% endif %}
 {% endblock %}

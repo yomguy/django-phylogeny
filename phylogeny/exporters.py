@@ -35,6 +35,11 @@ class ExporterRegistry(object):
 		
 		self._registry.add(exporter_class)
 	
+	def exporters(self):
+		'''Returns a tuple of registered exporters.'''
+		exporters = tuple(exporter for exporter in self._registry)
+		return exporters
+	
 	def choices(self):
 		'''
 		Returns a two-tuple of exporter format names and verbose names, suitable
