@@ -57,33 +57,6 @@ class Taxon(mptt_models.MPTTModel):
 	def __unicode__(self):
 		return u'%s' % self.name
 	
-	@models.permalink
-	def get_export_absolute_url(self, format='phyloxml'):
-		'''
-		Returns the absolute URL to export this taxon as root to a new phylogeny
-		in the file format `format` (`phyloxml`, `nexus`, or `newick`).
-		'''
-		if format == 'nexus':
-			ext = 'nex'
-		elif format == 'newick':
-			ext = 'tree'
-		else:
-			ext = 'xml'
-		
-		return ('phylogeny:export', None, {
-			'slug': self.slug,
-			'ext': ext
-		})
-	
-	def get_export_phyloxml_absolute_url(self):
-		return self.get_export_absolute_url()
-	
-	def get_export_nexus_absolute_url(self):
-		return self.get_export_absolute_url(format='nexus')
-	
-	def get_export_newick_absolute_url(self):
-		return self.get_export_absolute_url(format='newick')
-	
 	def natural_key(self):
 		return (self.slug,)
 	
