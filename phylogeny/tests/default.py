@@ -1,11 +1,12 @@
 import os
 
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
 import phylogeny
 from phylogeny.models import Taxon, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
-from phylogeny.exporters import PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter
-from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment
+from phylogeny.exporters import exporter_registry, PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter
+from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound
 
 
 class GeneralPhylogenyTestCase(TestCase):
@@ -110,7 +111,7 @@ class PhyloExporterTestCase(TestCase):
 		self.assertEqual(self.nexus_exporter.taxon, self.first_taxon)
 		self.assertEqual(self.newick_exporter.taxon, self.first_taxon)
 	
-	def textExportToAssignment(self):
+	def testExportToAssignment(self):
 		self.assertEqual(self.phyloxml_exporter.export_to, '/export/')
 		self.assertEqual(self.nexus_exporter.export_to, '/export/')
 		self.assertEqual(self.newick_exporter.export_to, '/export/')
@@ -119,4 +120,26 @@ class PhyloExporterTestCase(TestCase):
 		self.assertEqual('%s' % self.phyloxml_exporter(), '%s' % self.expected_phyloxml_string)
 		self.assertEqual('%s' % self.nexus_exporter(), '%s' % self.expected_nexus_string)
 		self.assertEqual('%s' % self.newick_exporter(), '%s' % self.expected_newick_string)
+	
+
+class PhyloExporterRegistryTestCase(TestCase):
+	'''Tests phylogeny exporter registry.'''
+	
+	def setUp(self):
+		self.exporter_registry = exporter_registry
+	
+	def testExporterRegistryExceptions(self):
+		def register_non_class():
+			self.exporter_registry.register('string')
+		def register_class_twice():
+			self.exporter_registry.register(PhyloXMLPhyloExporter)
+		def get_bad_format_name():
+			self.exporter_registry.get_by_format_name('string')
+		def get_bad_extension():
+			self.exporter_registry.get_by_extension('string')
+		
+		self.assertRaises(PhyloExporterRegistryOnlyClassesMayRegister, register_non_class)
+		self.assertRaises(PhyloExporterRegistryClassAlreadyRegistered, register_class_twice)
+		self.assertRaises(PhyloExporterRegistryExporterNotFound, get_bad_format_name)
+		self.assertRaises(PhyloExporterRegistryExporterNotFound, get_bad_extension)
 	
