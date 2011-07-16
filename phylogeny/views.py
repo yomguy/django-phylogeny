@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from phylogeny.models import Taxon
 from phylogeny.forms import PhylogenyImportForm
-from phylogeny.exporters import PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter
+from phylogeny.exporters import exporter_registry
 from phylogeny.exceptions import PhylogenyImportMergeConflict
 from phylogeny.utils import import_phylogeny
 
@@ -44,19 +44,14 @@ class PhylogenyExportView(BaseDetailView):
 		ext = self.kwargs['ext']
 		
 		content_type = 'text/plain'
-		
-		# TODO:  need a more elegant way to get exporter by format name (perhaps a manager that registers exporters?)
-		if ext == 'nex':
-			exporter = NexusPhyloExporter()
-		elif ext == 'tree':
-			exporter = NewickPhyloExporter()
-		else:
-			exporter = PhyloXMLPhyloExporter()
+		if ext == 'xml':
 			content_type = 'application/xml'
 		
+		exporter = exporter_registry.get_by_extension(ext)
 		exporter.taxon = self.object
 		
 		content = exporter()
+		
 		response = HttpResponse(content, content_type=content_type, **kwargs)
 		response['Content-Disposition'] = 'attachment; filename=%s.%s' % (slug, ext)
 		

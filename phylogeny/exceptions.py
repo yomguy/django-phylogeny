@@ -21,3 +21,20 @@ class PhyloExporterUnsupportedTaxonAssignment(Exception):
 	'''
 	pass
 	
+
+class PhyloExporterRegistryOnlyClassesMayRegister(Exception):
+	'''
+	Exporter registry method `register` was called with a non-class argument.
+	'''
+	pass
+	
+
+class PhyloExporterRegistryClassAlreadyRegistered(Exception):
+	'''Exporter class attempted to register more than once.'''
+	pass
+	
+
+class PhyloExporterRegistryExporterNotFound(Exception):
+	'''Exporter class not found.'''
+	pass
+	
