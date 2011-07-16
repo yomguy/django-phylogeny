@@ -12,9 +12,7 @@ from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloE
 
 class ExporterRegistry(object):
 	'''
-	Registers exporters and reports on exporter availability.  Registered
-	exporter classes are listed in the list returned
-	by `get_registered_exporters`.
+	Registers exporters and reports on exporter availability.
 	
 	Exporter classes may register with a Registry instance:
 		`registry.register(ExporterClass)`
@@ -35,40 +33,29 @@ class ExporterRegistry(object):
 		
 		self._registry.add(exporter_class)
 	
-	def exporters(self):
-		'''Returns a tuple of registered exporters.'''
-		exporters = tuple(exporter for exporter in self._registry)
+	def get_exporters(self):
+		'''
+		Returns a tuple of registered exporter instances.
+		'''
+		exporters = tuple(exporter_class for exporter_class in self._registry)
 		return exporters
-	
-	def choices(self):
-		'''
-		Returns a two-tuple of exporter format names and verbose names, suitable
-		for use with the `choices` option in some model and form fields.
-		'''
-		choices = tuple((exporter.format_name, exporter.verbose_name) for exporter in self._registry)
-		return choices
-	
-	def extensions(self):
-		'''Returns a tuple of exporter extensions.'''
-		extensions = tuple(exporter.extension for exporter in self._registry)
-		return extensions
 	
 	def get_by_format_name(self, format_name):
 		'''
 		Returns an instance of the first exporter with a matching format name.
 		'''
-		for exporter in self._registry:
-			if exporter.format_name == format_name:
-				return exporter()
+		for exporter_class in self._registry:
+			if exporter_class.format_name == format_name:
+				return exporter_class()
 		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with format name %s not found.') % format_name)
 	
 	def get_by_extension(self, extension):
 		'''
 		Returns an instance of the first exporter with a matching extension.
 		'''
-		for exporter in self._registry:
-			if exporter.extension == extension:
-				return exporter()
+		for exporter_class in self._registry:
+			if exporter_class.extension == extension:
+				return exporter_class()
 		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with extension %s not found.') % extension)
 	
 
