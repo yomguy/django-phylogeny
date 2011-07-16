@@ -9,20 +9,19 @@ from phylogeny.exporters import exporter_registry
 register = template.Library()
 
 
-class ExporterNode(template.Node):
+class ExportersNode(template.Node):
 	def __init__(self, var_name):
 		self.var_name = var_name
 	
 	def render(self, context):
-		exporters = exporter_registry.exporters
-		context[self.var_name] = exporters
+		context[self.var_name] = exporter_registry.get_exporters
 		return ''
 	
 
 @register.tag
 def get_exporters(parser, token):
 	'''
-	Gets a tuple of registered exporters and adds to the context as `var_name`.
+	Adds a tuple of registered exporter classes to the context as `var_name`.
 	
 	Usage::
 		
@@ -34,5 +33,5 @@ def get_exporters(parser, token):
 	
 	var_name = bits[2]
 	
-	return ExporterNode(var_name)
+	return ExportersNode(var_name)
 	
