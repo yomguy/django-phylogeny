@@ -21,7 +21,6 @@ class Command(BaseCommand):
 		
 		format = options['format']
 		importer = importer_registry.get_by_format_name(format)
-		importer.import_from = path
-		importer.save()	
+		importer.save(import_from=path)	
 		self.stdout.write(_('Successfully imported tree from "%(path)s" in format "%(format)s"\n') % {'path': path, 'format': options['format']})
 	

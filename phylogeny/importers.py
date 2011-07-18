@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from Bio import Phylo
 
-from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
 from phylogeny.exceptions import PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound, PhylogenyImportMergeConflict
 from phylogeny.utils import slugify_unique
 
@@ -63,6 +62,7 @@ class AbstractBasePhyloImporter(object):
 	verbose_name = _('Import Phylogeny')
 	# name of phylogeny format
 	format_name = None
+	format_verbose_name = _('Phylogeny')
 	
 	def __init__(self, phylogeny=None, import_from=None):
 		'''Initializes an instance of the phylogeny importer.'''
@@ -106,14 +106,14 @@ class AbstractBasePhyloImporter(object):
 	@property
 	def import_from(self):
 		'''
-		The path where the importer should get the phylogeny when using
+		The file or path where the importer should get the phylogeny when using
 		the `save` method.
 		'''
 		import_from = None
 		if callable(self._import_from):
-			import_from = '%s' % self._import_from()
+			import_from = self._import_from()
 		elif self._import_from:
-			import_from = '%s' % self._import_from
+			import_from = self._import_from
 		return import_from
 	
 	@import_from.setter
@@ -138,6 +138,7 @@ class AbstractBaseBiopythonPhyloImporter(AbstractBasePhyloImporter):
 	'''Imports a phylogeny rooted on a given taxon to a Biopython phylogeny.'''
 	__metaclass__ = ABCMeta
 	verbose_name = _('Import Biopython Phylogeny')
+	format_verbose_name = _('Biopython Phylogeny')
 	
 	def get_taxon_for_clade(self, clade, parent_taxon=None):
 		'''
@@ -154,7 +155,8 @@ class AbstractBaseBiopythonPhyloImporter(AbstractBasePhyloImporter):
 
 			None:  the default merge strategy is to abort import.
 		'''
-
+		from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
+		
 		# merge strategy None is the only supported strategy at this time
 		merge_strategy = None
 		
@@ -247,18 +249,21 @@ class PhyloXMLPhyloImporter(AbstractBaseBiopythonPhyloImporter):
 	'''Imports a phylogeny from a Biopython PhyloXML phylogeny file.'''
 	verbose_name = _('Import PhyloXML Phylogeny')
 	format_name = 'phyloxml'
+	format_verbose_name = _('PhyloXML')
 
 
 class NexusPhyloImporter(AbstractBaseBiopythonPhyloImporter):
 	'''Imports a phylogeny from a Biopython Nexus phylogeny file.'''
 	verbose_name = _('Import Nexus Phylogeny')
 	format_name = 'nexus'
+	format_verbose_name = _('Nexus')
 
 
 class NewickPhyloImporter(AbstractBaseBiopythonPhyloImporter):
 	'''Imports a phylogeny from a Biopython Newick phylogeny file.'''
 	verbose_name = _('Import Newick Phylogeny')
 	format_name = 'newick'
+	format_verbose_name = _('Newick')
 
 
 # registry is used to register importer classes and report on them

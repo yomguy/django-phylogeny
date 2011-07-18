@@ -9,7 +9,7 @@ from phylogeny.models import Taxon
 from phylogeny.forms import PhylogenyImportForm
 from phylogeny.exporters import exporter_registry
 from phylogeny.exceptions import PhylogenyImportMergeConflict
-from phylogeny.utils import import_phylogeny
+from phylogeny.importers import importer_registry
 
 
 class PhylogenyAdminVisualizeView(DetailView):
@@ -83,8 +83,9 @@ class PhylogenyAdminImportView(FormView):
 		if form.is_valid():
 			format = form.cleaned_data.get('file_format')
 			try:
+				importer = importer_registry.get_by_format_name(format)
 				for file_field in request.FILES:
-					import_phylogeny(path=request.FILES[file_field], format=format)
+					importer.save(import_from=request.FILES[file_field])
 			except PhylogenyImportMergeConflict as exception:
 				form._errors['file_field'] = form.error_class(['%s' % exception])
 				return self.render_to_response({'form': form})
@@ -100,4 +101,4 @@ class PhylogenyAdminImportView(FormView):
 				window.close();
 			</script>
 		''')
-
+	
