@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from Bio import Phylo
 
 from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
-from phylogeny.exceptions import PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound
+from phylogeny.exceptions import PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound, PhylogenyImportMergeConflict
 from phylogeny.utils import slugify_unique
 
 
@@ -241,7 +241,6 @@ class AbstractBaseBiopythonPhyloImporter(AbstractBasePhyloImporter):
 		with transaction.commit_on_success():
 			# start transaction
 			taxon = self.get_object()
-			taxon.save()
 	
 
 class PhyloXMLPhyloImporter(AbstractBaseBiopythonPhyloImporter):
