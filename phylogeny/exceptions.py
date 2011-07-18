@@ -38,3 +38,20 @@ class PhyloExporterRegistryExporterNotFound(Exception):
 	'''Exporter class not found.'''
 	pass
 	
+
+class PhyloImporterRegistryOnlyClassesMayRegister(Exception):
+	'''
+	Importer registry method `register` was called with a non-class argument.
+	'''
+	pass
+
+
+class PhyloImporterRegistryClassAlreadyRegistered(Exception):
+	'''Importer class attempted to register more than once.'''
+	pass
+
+
+class PhyloImporterRegistryImporterNotFound(Exception):
+	'''Importer class not found.'''
+	pass
+	
