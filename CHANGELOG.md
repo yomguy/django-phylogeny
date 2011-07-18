@@ -1,11 +1,21 @@
 # Django Phylogeny Changelog
 
 
+## v0.4.0 (2011.july.18):
+
+* Added class-based importers (importers.py).
+* Added "importer registry" to manage importer classes.  Importer registry makes it easier to add and remove importers to the app with very little effort.  Importer registry provides an interface to register available importers and to subsequently get them, allowing code relying on importers to be generic.
+* Added support throughout app for class-based importers via the importer registry including:  view class PhylogenyAdminImportView and import management command import-phylogeny.
+* Added class-based importer-related exceptions to exceptions.py.
+* Removed old import_phylogeny function and other import-related functions from utils.py.
+
+
 ## v0.3.0 (2011.july.16):
 
 * Added "exporter registry" to manage exporters.  Exporter registry makes it easier to add and remove exporters to the app with very little effort.  Exporter registry provides an interface to register available exporters and to subsequently get them, allowing code relying on exporters to be generic.
 * Updated code that relied on exporters to use exporter registry instead.  Code no longer has knowledge of specific exporters; rather it works generically on any exporters exposed by exporter registry.
 * Removed hard-coded references to specific exporters from app except in test cases.
+
 
 ## v0.2.0 (2011.july.15):
 
