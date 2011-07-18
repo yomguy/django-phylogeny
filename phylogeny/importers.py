@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 from inspect import isclass
 
 from django.db import transaction
+from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
@@ -120,8 +121,7 @@ class AbstractBasePhyloImporter(object):
 		'''Sets the value of the `import_from` property.'''
 		if import_from is not None:
 			self._import_from = import_from
-			tree = Phylo.read(self.import_from, self.format_name)
-			self.phylogeny = tree.to_phylogeny()
+			self.phylogeny = Phylo.read(self.import_from, self.format_name)
 	
 	@abstractmethod
 	def get_object(self):
@@ -139,7 +139,7 @@ class AbstractBaseBiopythonPhyloImporter(AbstractBasePhyloImporter):
 	__metaclass__ = ABCMeta
 	verbose_name = _('Import Biopython Phylogeny')
 	
-	def get_taxon_for_clade(clade, parent_taxon=None):
+	def get_taxon_for_clade(self, clade, parent_taxon=None):
 		'''
 		Imports data from a phylogeny and saves taxa to the database.
 
@@ -221,7 +221,7 @@ class AbstractBaseBiopythonPhyloImporter(AbstractBasePhyloImporter):
 		taxon.move_to(parent_taxon)
 
 		for child_clade in clade.clades:
-			get_taxon_for_clade(child_clade, parent_taxon=taxon)
+			self.get_taxon_for_clade(child_clade, parent_taxon=taxon)
 
 		return taxon
 	

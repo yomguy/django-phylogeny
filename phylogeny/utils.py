@@ -1,14 +1,7 @@
 from os import path
 from datetime import datetime
-from uuid import uuid4
 
-from django.db import transaction
-from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
-
-from Bio.Phylo import PhyloXML, write, parse
-
-from phylogeny.exceptions import PhylogenyImportMergeConflict, PhylogenyImportNameConflict
 
 
 def get_taxon_image_upload_to(instance, filename):
