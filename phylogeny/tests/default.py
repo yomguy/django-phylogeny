@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 import phylogeny
 from phylogeny.models import Taxon, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
 from phylogeny.exporters import exporter_registry, PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter
-from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound
+from phylogeny.importers import importer_registry, PhyloXMLPhyloImporter, NexusPhyloImporter, NewickPhyloImporter
+from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound, PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound, PhylogenyImportMergeConflict
 
 
 class GeneralPhylogenyTestCase(TestCase):
@@ -124,7 +125,6 @@ class PhyloExporterTestCase(TestCase):
 
 class PhyloExporterRegistryTestCase(TestCase):
 	'''Tests phylogeny exporter registry.'''
-	
 	def setUp(self):
 		self.exporter_registry = exporter_registry
 	
@@ -142,4 +142,77 @@ class PhyloExporterRegistryTestCase(TestCase):
 		self.assertRaises(PhyloExporterRegistryClassAlreadyRegistered, register_class_twice)
 		self.assertRaises(PhyloExporterRegistryExporterNotFound, get_bad_format_name)
 		self.assertRaises(PhyloExporterRegistryExporterNotFound, get_bad_extension)
+	
+
+class PhyloImporterTestCase(TestCase):
+	'''Tests phylogeny importers.'''
+	
+	def setUp(self):
+		# exporter
+		self.phyloxml_importer = PhyloXMLPhyloImporter()
+		self.nexus_importer = NexusPhyloImporter()
+		self.newick_importer = NewickPhyloImporter()
+		# expected phyloxml
+		phyloxml_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			phyloxml_path = os.path.join(phyloxml_path, path)
+		self.phyloxml_path = os.path.join(phyloxml_path, 'tests', 'expected-phyloxml.xml')
+		# expected nexus
+		nexus_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			nexus_path = os.path.join(nexus_path, path)
+		self.nexus_path = os.path.join(nexus_path, 'tests', 'expected-nexus.nex')
+		# expected newick
+		newick_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			newick_path = os.path.join(newick_path, path)
+		self.newick_path = os.path.join(newick_path, 'tests', 'expected-newick.tree')
+	
+	def testPhyloXMLImport(self):
+		self.phyloxml_importer.import_from = self.phyloxml_path
+		self.phyloxml_importer.save()
+		self.assertEqual(Taxon.objects.count(), 13)
+	
+	def testNexusImport(self):
+		self.nexus_importer.import_from = self.nexus_path
+		self.nexus_importer.save()
+		self.assertEqual(Taxon.objects.count(), 13)
+	
+	def testNewickImport(self):
+		self.newick_importer.import_from = self.newick_path
+		self.newick_importer.save()
+		self.assertEqual(Taxon.objects.count(), 13)
+	
+
+class PhyloImporterRegistryTestCase(TestCase):
+	'''Tests phylogeny importer registry.'''
+	fixtures = ('test-fixture-wasps.json',)
+	
+	def setUp(self):
+		self.importer_registry = importer_registry
+		# expected phyloxml
+		phyloxml_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			phyloxml_path = os.path.join(phyloxml_path, path)
+		self.phyloxml_path = os.path.join(phyloxml_path, 'tests', 'expected-phyloxml.xml')
+	
+	def testImporterRegistryExceptions(self):
+		def register_non_class():
+			self.importer_registry.register('string')
+		def register_class_twice():
+			self.importer_registry.register(PhyloXMLPhyloImporter)
+		def get_bad_format_name():
+			self.importer_registry.get_by_format_name('string')
+		def import_conflict():
+			importer = PhyloXMLPhyloImporter(import_from=self.phyloxml_path)
+			importer.save()
+		
+		self.assertRaises(PhyloImporterRegistryOnlyClassesMayRegister, register_non_class)
+		self.assertRaises(PhyloImporterRegistryClassAlreadyRegistered, register_class_twice)
+		self.assertRaises(PhyloImporterRegistryImporterNotFound, get_bad_format_name)
+		self.assertRaises(PhylogenyImportMergeConflict, import_conflict)
 	
