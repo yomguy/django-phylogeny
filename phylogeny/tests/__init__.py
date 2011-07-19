@@ -1,1 +1,1 @@
-from phylogeny.tests.default import GeneralPhylogenyTestCase, PhyloExporterTestCase, PhyloExporterRegistryTestCase, PhyloImporterRegistryTestCase
+from phylogeny.tests.default import GeneralPhylogenyTestCase, PhyloExporterTestCase, PhyloExporterRegistryTestCase, PhyloImporterTestCase, PhyloImporterRegistryTestCase

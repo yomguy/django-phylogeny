@@ -144,6 +144,49 @@ class PhyloExporterRegistryTestCase(TestCase):
 		self.assertRaises(PhyloExporterRegistryExporterNotFound, get_bad_extension)
 	
 
+class PhyloImporterTestCase(TestCase):
+	'''Tests phylogeny importers.'''
+	
+	def setUp(self):
+		# exporter
+		self.phyloxml_importer = PhyloXMLPhyloImporter()
+		self.nexus_importer = NexusPhyloImporter()
+		self.newick_importer = NewickPhyloImporter()
+		# expected phyloxml
+		phyloxml_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			phyloxml_path = os.path.join(phyloxml_path, path)
+		self.phyloxml_path = os.path.join(phyloxml_path, 'tests', 'expected-phyloxml.xml')
+		# expected nexus
+		nexus_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			nexus_path = os.path.join(nexus_path, path)
+		self.nexus_path = os.path.join(nexus_path, 'tests', 'expected-nexus.nex')
+		# expected newick
+		newick_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			newick_path = os.path.join(newick_path, path)
+		self.newick_path = os.path.join(newick_path, 'tests', 'expected-newick.tree')
+	
+	def testPhyloXMLImport(self):
+		self.phyloxml_importer.import_from = self.phyloxml_path
+		self.phyloxml_importer.save()
+		self.assertEqual(Taxon.objects.count(), 13)
+	
+	def testNexusImport(self):
+		self.nexus_importer.import_from = self.nexus_path
+		self.nexus_importer.save()
+		self.assertEqual(Taxon.objects.count(), 13)
+	
+	def testNewickImport(self):
+		self.newick_importer.import_from = self.newick_path
+		self.newick_importer.save()
+		self.assertEqual(Taxon.objects.count(), 13)
+	
+
 class PhyloImporterRegistryTestCase(TestCase):
 	'''Tests phylogeny importer registry.'''
 	fixtures = ('test-fixture-wasps.json',)
