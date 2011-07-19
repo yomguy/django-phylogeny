@@ -1,6 +1,12 @@
 # Django Phylogeny Changelog
 
 
+## v0.4.1 (2011.july.18):
+
+* Added tests for class-based importers.
+* Added tests for import registry.
+
+
 ## v0.4.0 (2011.july.18):
 
 * Added class-based importers (importers.py).
