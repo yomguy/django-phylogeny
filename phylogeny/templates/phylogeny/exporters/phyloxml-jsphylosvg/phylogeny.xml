@@ -1,0 +1,5 @@
+<phyloxml xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd' xmlns='http://www.phyloxml.org'>
+	<phylogeny rooted='true'>
+		{% include clade_template_path %}
+	</phylogeny>
+</phyloxml>

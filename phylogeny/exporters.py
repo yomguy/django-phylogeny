@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
 from inspect import isclass
 
+from django.template import Context
+from django.template.loader import get_template
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
@@ -276,6 +278,35 @@ class NewickPhyloExporter(AbstractBaseBiopythonPhyloExporter):
 	extension = 'tree'
 	
 
+class JSPhyloSVGPhyloXMLPhyloExporter(AbstractBasePhyloExporter):
+	'''Exports a phylogeny to a jsPhyloSVG dialect of PhyloXML.'''
+	verbose_name = _('Export jsPhyloSVG PhyloXML')
+	format_name = 'phyloxml-jsphylosvg'
+	extension = 'xml'
+	
+	def __call__(self):
+		'''Returns a jsPhyloSVG PhyloXML string.'''
+		return u'%s' % self.get_object()
+	
+	def get_object(self):
+		'''Returns a jsPhyloSVG PhyloXML string.'''
+		template_path = 'phylogeny/exporters/%s/%s.%s'
+		t = get_template(template_path % (self.format_name, 'phylogeny', self.extension,))
+		c = Context({
+			'object': self.taxon,
+			'clade_template_path': template_path % (self.format_name, 'clade', self.extension,)
+		})
+		return t.render(c)
+	
+	def save(self, export_to=None):
+		'''Saves the jsPhyloSVG PhyloXML to file.'''
+		if export_to is not None:
+			self.export_to = export_to
+		output = self()
+		with open(self.export_to, 'w') as f:
+			f.write(output)
+	
+
 # registry is used to register exporter classes and report on them
 # throughout the app
 exporter_registry = ExporterRegistry()
@@ -283,3 +314,4 @@ exporter_registry = ExporterRegistry()
 exporter_registry.register(PhyloXMLPhyloExporter)
 exporter_registry.register(NexusPhyloExporter)
 exporter_registry.register(NewickPhyloExporter)
+exporter_registry.register(JSPhyloSVGPhyloXMLPhyloExporter)

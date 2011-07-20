@@ -1,0 +1,17 @@
+<clade>
+	{% if object.name != 'none' %}<name>{{ object.name }}</name>{% endif %}
+	<branch_length>{{ object.branch_length }}</branch_length>
+	{% if object.tagline or object.get_absolute_url %}
+		<annotation>
+			{% if object.tagline %}
+				<desc>{{ object.tagline }}</desc>
+			{% endif %}
+			{% if object.get_absolute_url %}
+				<uri>{{ object.get_absolute_url }}</uri>
+			{% endif %}
+		</annotation>
+	{% endif %}
+	{% for object in object.get_children %}
+		{% include clade_template_path %}
+	{% endfor %}
+</clade>
