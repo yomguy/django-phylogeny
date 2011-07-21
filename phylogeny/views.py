@@ -30,7 +30,9 @@ class PhylogenyAdminVisualizeView(DetailView):
 class PhylogenyExportView(BaseDetailView):
 	'''
 	Exports a phylogeny to a downloadable file.  The phylogeny is rooted on the
-	given taxon and in the format specified by the `ext` argument.  
+	given taxon and in the format specified by the `ext` argument.  Since
+	multiple exporters may share an extension, a clarifying URL parameter
+	`format` may be specified with the exporter format name.
 	'''
 	queryset = Taxon.objects.all()
 	
@@ -42,16 +44,19 @@ class PhylogenyExportView(BaseDetailView):
 		'''
 		slug = self.kwargs['slug']
 		ext = self.kwargs['ext']
+		format = self.request.GET.get('format', '')
 		
 		content_type = 'text/plain'
 		if ext == 'xml':
 			content_type = 'application/xml'
 		
-		exporter = exporter_registry.get_by_extension(ext)
+		if format:
+			exporter = exporter_registry.get_by_format_name_and_extension(format, ext)
+		else:
+			exporter = exporter_registry.get_by_extension(ext)
+		
 		exporter.taxon = self.object
-		
 		content = exporter()
-		
 		response = HttpResponse(content, content_type=content_type, **kwargs)
 		response['Content-Disposition'] = 'attachment; filename=%s.%s' % (slug, ext)
 		

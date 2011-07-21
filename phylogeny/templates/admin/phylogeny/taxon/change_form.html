@@ -7,7 +7,7 @@
 		{% get_exporters as exporters %}
 		<li><a href="{% url admin:phylogeny:visualize slug=original.slug %}" class="exportlink" onclick="return showAddAnotherPopup(this);">{% trans 'Visualize' %}</a></li>
 		{% for exporter in exporters %}
-			<li><a href="{% url phylogeny:export slug=original.slug ext=exporter.extension %}" class="exportlink">{{ exporter }}</a></li>
+			<li><a href="{% url phylogeny:export slug=original.slug ext=exporter.extension %}?format={{ exporter.format_name }}" class="exportlink">{{ exporter }}</a></li>
 		{% endfor %}
 	{% endif %}
 {% endblock %}
