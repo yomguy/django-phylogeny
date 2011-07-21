@@ -1,77 +1,81 @@
 <phyloxml xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd' xmlns='http://www.phyloxml.org'>
-	<phylogeny rooted='true'>
-		
-			
+	<phylogeny rooted='false'>
+		<render>
+			<parameters>
+				<circular>
+					<bufferRadius>0.5</bufferRadius>
+				</circular>
+				<rectangular>
+					<alignRight>1</alignRight>
+					<bufferX>300</bufferX>
+				</rectangular>
+			</parameters>
+			<styles>
 				
-				<goldenrod fill='#f7cd23' stroke-width='0' type='radialGradient' >
-					<stop offset='0%' style='stop-color:#f7cd23; stop-opacity:0'/>
-					<stop offset='93%' style='stop-color:#f7cd23; stop-opacity:1'/>
-					<stop offset='100%' style='stop-color:#4C3F0B; stop-opacity:1'/>
-				</goldenrod>
-			
-		
+			</styles>
+		</render>
 		<clade>
-	<name>Animalia</name>
+	<name bgStyle="default">Animalia</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Arthropoda</name>
+	<name bgStyle="default">Arthropoda</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Hexapoda</name>
+	<name bgStyle="default">Hexapoda</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Insecta</name>
+	<name bgStyle="default">Insecta</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Pterygota</name>
+	<name bgStyle="default">Pterygota</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Neoptera</name>
+	<name bgStyle="default">Neoptera</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Hymenoptera</name>
+	<name bgStyle="default">Hymenoptera</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Apocrita</name>
+	<name bgStyle="default">Apocrita</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Aculeata</name>
+	<name bgStyle="default">Aculeata</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Vespoidea</name>
+	<name bgStyle="default">Vespoidea</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Vespidae</name>
+	<name bgStyle="default">Vespidae</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Vespa</name>
+	<name bgStyle="default">Vespa</name>
 	<branch_length>1.0</branch_length>
 	
 	
 		<clade>
-	<name>Vespa crabro</name>
+	<name bgStyle="default">Vespa crabro</name>
 	<branch_length>1.0</branch_length>
 	
 	
