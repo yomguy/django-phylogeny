@@ -173,7 +173,7 @@ class AbstractBaseBiopythonPhyloImporter(AbstractBasePhyloImporter):
 		}
 
 		if hasattr(clade, 'branch_length'):
-			defaults['branch_length'] = clade.branch_length
+			defaults['branch_length'] = clade.branch_length or defaults['branch_length']
 
 		# add clade date to taxon defaults if available
 		# NOTE:  date output is disabled since Biopython can't read its own output
