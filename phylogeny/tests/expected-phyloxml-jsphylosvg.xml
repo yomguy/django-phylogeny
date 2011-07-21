@@ -1,5 +1,15 @@
 <phyloxml xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd' xmlns='http://www.phyloxml.org'>
 	<phylogeny rooted='true'>
+		
+			
+				
+				<goldenrod fill='#f7cd23' stroke-width='0' type='radialGradient' >
+					<stop offset='0%' style='stop-color:#f7cd23; stop-opacity:0'/>
+					<stop offset='93%' style='stop-color:#f7cd23; stop-opacity:1'/>
+					<stop offset='100%' style='stop-color:#4C3F0B; stop-opacity:1'/>
+				</goldenrod>
+			
+		
 		<clade>
 	<name>Animalia</name>
 	<branch_length>1.0</branch_length>

@@ -100,7 +100,7 @@ class PhyloExporterTestCase(TestCase):
 		phylogeny_path = phylogeny.__path__
 		for path in phylogeny_path:
 			js_phylo_path = os.path.join(js_phylo_path, path)
-		js_phylo_path = os.path.join(js_phylo_path, 'tests', 'expected-js-phylo.xml')
+		js_phylo_path = os.path.join(js_phylo_path, 'tests', 'expected-phyloxml-jsphylosvg.xml')
 		with open(js_phylo_path, 'r') as f:
 			self.expected_js_phylo_string = f.read()
 	
