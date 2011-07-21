@@ -237,6 +237,9 @@ class Color(models.Model):
 	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
 	color = ColorField(_('color'), max_length=7)
 	
+	# manager
+	objects = managers.ColorManager()
+	
 	class Meta:
 		verbose_name = _('color')
 		verbose_name_plural = _('colors')
@@ -254,6 +257,9 @@ class TaxonBackgroundColor(models.Model):
 	'''
 	color = models.ForeignKey(Color, verbose_name=_('color'))
 	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+	
+	# manager
+	objects = managers.TaxonBackgroundColorManager()
 	
 	class Meta:
 		verbose_name = _('taxon background color')
