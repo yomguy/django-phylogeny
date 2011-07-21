@@ -1,0 +1,121 @@
+<phyloxml xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd' xmlns='http://www.phyloxml.org'>
+	<phylogeny rooted='false'>
+		<render>
+			<parameters>
+				<circular>
+					<bufferRadius>0.5</bufferRadius>
+				</circular>
+				<rectangular>
+					<alignRight>1</alignRight>
+					<bufferX>300</bufferX>
+				</rectangular>
+			</parameters>
+			<styles>
+				
+			</styles>
+		</render>
+		<clade>
+	<name bgStyle="default">Animalia</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Arthropoda</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Hexapoda</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Insecta</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Pterygota</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Neoptera</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Hymenoptera</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Apocrita</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Aculeata</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Vespoidea</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Vespidae</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Vespa</name>
+	<branch_length>1.0</branch_length>
+	
+	
+		<clade>
+	<name bgStyle="default">Vespa crabro</name>
+	<branch_length>1.0</branch_length>
+	
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	
+</clade>
+
+	</phylogeny>
+</phyloxml>

@@ -54,4 +54,9 @@ class PhyloImporterRegistryClassAlreadyRegistered(Exception):
 class PhyloImporterRegistryImporterNotFound(Exception):
 	'''Importer class not found.'''
 	pass
-	
+
+
+class PhylogenyDjangoColorsNotInstalled(Exception):
+	'''Django Colors app is not installed.'''
+	pass
+
