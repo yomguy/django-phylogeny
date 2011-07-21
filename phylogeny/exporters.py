@@ -61,6 +61,16 @@ class ExporterRegistry(object):
 				return exporter_class()
 		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with extension %s not found.') % extension)
 	
+	def get_by_format_name_and_extension(self, format_name, extension):
+		'''
+		Returns an instance of the first exporter with both a matching format
+		name and extension.
+		'''
+		for exporter_class in self._registry:
+			if exporter_class.format_name == format_name and exporter_class.extension == extension:
+				return exporter_class()
+		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with format name %s and extension %s not found.') % (format_name, extension,))
+
 
 class AbstractBasePhyloExporter(object):
 	'''
