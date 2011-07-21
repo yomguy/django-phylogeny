@@ -5,10 +5,11 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from Bio import Phylo
 
-from phylogeny.models import Taxon
+from phylogeny.models import Taxon, Color
 from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound
 
 
@@ -293,6 +294,8 @@ class JSPhyloSVGPhyloXMLPhyloExporter(AbstractBasePhyloExporter):
 		template_path = 'phylogeny/exporters/%s/%s.%s'
 		t = get_template(template_path % (self.format_name, 'phylogeny', self.extension,))
 		c = Context({
+			'colors': Color.objects.all,
+			'colors_app_installed': ('colors' in settings.INSTALLED_APPS),
 			'object': self.taxon,
 			'clade_template_path': template_path % (self.format_name, 'clade', self.extension,)
 		})

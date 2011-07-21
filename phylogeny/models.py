@@ -1,10 +1,22 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from mptt import models as mptt_models
 from Bio.Phylo.PhyloXML import Taxonomy
 
 from phylogeny import app_settings, utils, managers
+
+
+ColorField = models.CharField
+# try loading color picker field from the django-colors app
+# http://code.google.com/p/django-colors/
+# fallback on CharField if django-colors is not available
+if 'colors' in settings.INSTALLED_APPS:	
+	try:
+		from colors.fields import ColorField
+	except:
+		pass
 
 
 class Taxon(mptt_models.MPTTModel):
@@ -214,4 +226,43 @@ class TaxonImage(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % self.caption
+
+
+class Color(models.Model):
+	'''
+	Represents a reusable color style.  Color styles are primarily used by the
+	jsPhyloSVG PhyloXML exporter and the jsPhyloSVG phylogeny tree visualizer.
+	'''
+	name = models.CharField(_('name'), max_length=64)
+	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
+	color = ColorField(_('color'), max_length=7)
+	
+	class Meta:
+		verbose_name = _('color')
+		verbose_name_plural = _('colors')
+	
+	def __unicode__(self):
+		return u'%s' % self.name
+	
+	def natural_key(self):
+		return (self.slug,)
+
+
+class TaxonBackgroundColor(models.Model):
+	'''
+	Associates a background color with a taxon.
+	'''
+	color = models.ForeignKey(Color, verbose_name=_('color'))
+	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
+	
+	class Meta:
+		verbose_name = _('taxon background color')
+		verbose_name_plural = _('taxa background colors')
+		unique_together = ('color', 'taxon',)
+	
+	def __unicode__(self):
+		return u'%s: %s' % (self.color, self.taxon,)
+	
+	def natural_key(self):
+		return self.color.natural_key() + self.taxon.natural_key()
 

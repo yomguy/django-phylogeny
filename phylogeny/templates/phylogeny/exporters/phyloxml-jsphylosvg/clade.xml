@@ -1,5 +1,5 @@
 <clade>
-	{% if object.name != 'none' %}<name>{{ object.name }}</name>{% endif %}
+	<name{% if object.taxonbackgroundcolor_set.all %} bgStyle="{{ object.taxonbackgroundcolor_set.all.0.color.slug }}"{% endif %}>{{ object.name }}</name>
 	<branch_length>{{ object.branch_length }}</branch_length>
 	{% if object.tagline or object.get_absolute_url %}
 		<annotation>

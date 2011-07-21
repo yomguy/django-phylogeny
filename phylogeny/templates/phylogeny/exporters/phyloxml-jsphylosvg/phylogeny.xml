@@ -1,5 +1,17 @@
 <phyloxml xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd' xmlns='http://www.phyloxml.org'>
 	<phylogeny rooted='true'>
+		{% for color in colors %}
+			{% if colors_app_installed %}
+				{% load colors %}
+				<{{ color.slug }} fill='#{{ color.color }}' stroke-width='0' type='radialGradient' >
+					<stop offset='0%' style='stop-color:#{{ color.color }}; stop-opacity:0'/>
+					<stop offset='93%' style='stop-color:#{{ color.color }}; stop-opacity:1'/>
+					<stop offset='100%' style='stop-color:#{{ color.color|lightness:'30' }}; stop-opacity:1'/>
+				</{{ color.slug }}>
+			{% else %}
+				<{{ color.slug }} fill='#{{ color.color }}' stroke-width='0' />
+			{% endif %}
+		{% endfor %}
 		{% include clade_template_path %}
 	</phylogeny>
 </phyloxml>
