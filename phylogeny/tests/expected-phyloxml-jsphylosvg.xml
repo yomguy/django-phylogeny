@@ -15,6 +15,7 @@
 			</styles>
 		</render>
 		<clade>
+			<clade>
 	<name bgStyle="default">Animalia</name>
 	<branch_length>1.0</branch_length>
 	
@@ -117,5 +118,6 @@
 	
 </clade>
 
+		</clade>
 	</phylogeny>
 </phyloxml>

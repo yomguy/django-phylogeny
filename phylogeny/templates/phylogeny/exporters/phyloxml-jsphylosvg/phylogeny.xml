@@ -25,6 +25,8 @@
 				{% endfor %}
 			</styles>
 		</render>
-		{% include clade_template_path %}
+		<clade>
+			{% include clade_template_path %}
+		</clade>
 	</phylogeny>
 </phyloxml>
