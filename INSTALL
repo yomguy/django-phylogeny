@@ -17,9 +17,7 @@ Requirements:
 Optional:
  - Django modeltranslation app:  if present, Django Phylogeny will use modeltranslation to enable translations of plain-text fields
  - Django colors app:  if present, Django Phylogeny will use django-colors to
-enable a JavaScript color-picker UI on the color field of the Color model.
-Django Phylogeny will also output gradient background styles via the jsPhyloSVG
-PhyloXML exporter instead of solid background styles.
+enable a JavaScript color-picker UI on the color field of the TaxaCategory model.  Django Phylogeny also uses the app for gradient background styles in the output of jsPhyloSVG PhyloXML exporter, as opposed to solid background colors.
 
 You can obtain Python from http://www.python.org/, Django from
 http://www.djangoproject.com/, Biopython from http://biopython.org/, and
