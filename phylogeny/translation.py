@@ -1,6 +1,6 @@
 from modeltranslation.translator import translator, TranslationOptions
 
-from phylogeny.models import Taxon, Citation, DistributionPoint, TaxonImageCategory, TaxonImage
+from phylogeny.models import Taxon, Citation, DistributionPoint, TaxonImageCategory, TaxonImage, Color
 
 
 class TaxonTranslationOptions(TranslationOptions):
@@ -23,8 +23,13 @@ class TaxonImageTranslationOptions(TranslationOptions):
 	fields = ('caption', 'credit',)
 
 
+class ColorTranslationOptions(TranslationOptions):
+	fields = ('name',)
+
+
 translator.register(Taxon, TaxonTranslationOptions)
 translator.register(Citation, CitationTranslationOptions)
 translator.register(DistributionPoint, DistributionPointTranslationOptions)
 translator.register(TaxonImageCategory, TaxonImageCategoryTranslationOptions)
 translator.register(TaxonImage, TaxonImageTranslationOptions)
+translator.register(Color, ColorTranslationOptions)

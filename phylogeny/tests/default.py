@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import phylogeny
 from phylogeny.models import Taxon, TaxonomyDatabase, TaxonomyRecord, DistributionPoint
-from phylogeny.exporters import exporter_registry, PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter
+from phylogeny.exporters import exporter_registry, PhyloXMLPhyloExporter, NexusPhyloExporter, NewickPhyloExporter, JSPhyloSVGPhyloXMLPhyloExporter
 from phylogeny.importers import importer_registry, PhyloXMLPhyloImporter, NexusPhyloImporter, NewickPhyloImporter
 from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound, PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound, PhylogenyImportMergeConflict
 
@@ -70,6 +70,7 @@ class PhyloExporterTestCase(TestCase):
 		self.phyloxml_exporter = PhyloXMLPhyloExporter(taxon=self.first_taxon, export_to='/export/')
 		self.nexus_exporter = NexusPhyloExporter(taxon=self.first_taxon, export_to='/export/')
 		self.newick_exporter = NewickPhyloExporter(taxon=self.first_taxon, export_to='/export/')
+		self.js_phylo_exporter = JSPhyloSVGPhyloXMLPhyloExporter(taxon=self.first_taxon, export_to='/export/')
 		# expected phyloxml
 		phyloxml_path = ''
 		phylogeny_path = phylogeny.__path__
@@ -94,6 +95,14 @@ class PhyloExporterTestCase(TestCase):
 		newick_path = os.path.join(newick_path, 'tests', 'expected-newick.tree')
 		with open(newick_path, 'r') as f:
 			self.expected_newick_string = f.read()
+		# expected js phylo
+		js_phylo_path = ''
+		phylogeny_path = phylogeny.__path__
+		for path in phylogeny_path:
+			js_phylo_path = os.path.join(js_phylo_path, path)
+		js_phylo_path = os.path.join(js_phylo_path, 'tests', 'expected-phyloxml-jsphylosvg.xml')
+		with open(js_phylo_path, 'r') as f:
+			self.expected_js_phylo_string = f.read()
 	
 	def testExporterExceptions(self):
 		def phyloxml_taxon_assignment():
@@ -102,25 +111,31 @@ class PhyloExporterTestCase(TestCase):
 			self.nexus_exporter.taxon = 'taxon'
 		def newick_taxon_assignment():
 			self.newick_exporter.taxon = 'taxon'
+		def js_phylo_taxon_assignment():
+			self.js_phylo_exporter.taxon = 'taxon'
 		
 		self.assertRaises(PhyloExporterUnsupportedTaxonAssignment, phyloxml_taxon_assignment)
 		self.assertRaises(PhyloExporterUnsupportedTaxonAssignment, nexus_taxon_assignment)
 		self.assertRaises(PhyloExporterUnsupportedTaxonAssignment, newick_taxon_assignment)
+		self.assertRaises(PhyloExporterUnsupportedTaxonAssignment, js_phylo_taxon_assignment)
 	
 	def testTaxonAssignment(self):
 		self.assertEqual(self.phyloxml_exporter.taxon, self.first_taxon)
 		self.assertEqual(self.nexus_exporter.taxon, self.first_taxon)
 		self.assertEqual(self.newick_exporter.taxon, self.first_taxon)
+		self.assertEqual(self.js_phylo_exporter.taxon, self.first_taxon)
 	
 	def testExportToAssignment(self):
 		self.assertEqual(self.phyloxml_exporter.export_to, '/export/')
 		self.assertEqual(self.nexus_exporter.export_to, '/export/')
 		self.assertEqual(self.newick_exporter.export_to, '/export/')
+		self.assertEqual(self.js_phylo_exporter.export_to, '/export/')
 	
 	def testXMLExporterOutput(self):
 		self.assertEqual('%s' % self.phyloxml_exporter(), '%s' % self.expected_phyloxml_string)
 		self.assertEqual('%s' % self.nexus_exporter(), '%s' % self.expected_nexus_string)
 		self.assertEqual('%s' % self.newick_exporter(), '%s' % self.expected_newick_string)
+		self.assertEqual('%s' % self.js_phylo_exporter(), '%s' % self.expected_js_phylo_string)
 	
 
 class PhyloExporterRegistryTestCase(TestCase):

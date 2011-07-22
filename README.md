@@ -37,6 +37,11 @@ Add the django-phylogeny/ folder to your `PYTHONPATH`.
 * [Django MPTT](https://github.com/django-mptt/django-mptt/)
 
 
+## Optional
+
+* [Django Colors](http://code.google.com/p/django-colors/)
+
+
 ## Using Django Phylogeny in a Project
 
 Installing Django Phylogeny in your project is easy:
