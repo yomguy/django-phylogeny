@@ -1,4 +1,14 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
+'''
+Phylogeny importers import a phylogeny format (such as Nexus or PhyloXML) and
+save a tree of taxa to the database.
+
+Importer classes must be based on the ABC AbstractBasePhyloImporter.  Importers
+should register with the importer registry to make themselves known and
+accessible throughout the app:
+
+	importer_registry.register(<MyImporterClass>)
+'''
+from abc import ABCMeta, abstractmethod
 from inspect import isclass
 
 from django.db import transaction
@@ -8,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from Bio import Phylo
 
-from phylogeny.exceptions import PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound, PhylogenyImportMergeConflict
+from phylogeny.exceptions import PhyloImporterMissingAttribute, PhylogenyImportMergeConflict, PhyloImporterRegistryOnlyClassesMayRegister, PhyloImporterRegistryClassAlreadyRegistered, PhyloImporterRegistryImporterNotFound
 from phylogeny.utils import slugify_unique
 
 
@@ -64,15 +74,16 @@ class AbstractBasePhyloImporter(object):
 	format_name = None
 	format_verbose_name = _('Phylogeny')
 	
-	def __init__(self, phylogeny=None, import_from=None):
+	def __init__(self, phylogeny=None, import_from=None, *args, **kwargs):
 		'''Initializes an instance of the phylogeny importer.'''
+		super(AbstractBasePhyloImporter, self).__init__(*args, **kwargs)
+		self._phylogeny = None
+		self._import_from = None
 		self.phylogeny = phylogeny
 		self.import_from = import_from
 		
 		if self.format_name is None:
-			raise PhyloImporterMissingAttrbute(ugettext('Importer %s missing `format_name`.') % self)
-		
-		return super(AbstractBasePhyloImporter, self).__init__()
+			raise PhyloImporterMissingAttribute(ugettext('Importer %s missing `format_name`.') % self)
 	
 	def __repr__(self):
 		'''Returns the unicode representation of an importer instance.'''

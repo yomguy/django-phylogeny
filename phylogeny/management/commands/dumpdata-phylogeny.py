@@ -1,3 +1,13 @@
+'''
+This dumpdata management command is a near-duplicate of Django's internal
+dumpdata command, with a key difference.
+
+Since the Taxon model has a dependency on itself, it cannot be serialized using
+natural keys (if at all).  Relying on the fact that Taxon is based on MPTT, we
+know its instances are always output in depth-first order.  This means self-
+dependency will not cause problems when deserializing the data.  This management
+command allows self-dependency when serializing and when using natural keys.
+'''
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import BaseCommand, CommandError
 from django.core import serializers
@@ -30,11 +40,11 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         from django.db.models import get_app, get_apps, get_models, get_model
 
-        format = options.get('format','json')
-        indent = options.get('indent',None)
+        format_name = options.get('format', 'json')
+        indent = options.get('indent', None)
         using = options.get('database', DEFAULT_DB_ALIAS)
         connection = connections[using]
-        excludes = options.get('exclude',[])
+        excludes = options.get('exclude', [])
         show_traceback = options.get('traceback', False)
         use_natural_keys = options.get('use_natural_keys', False)
         use_base_manager = options.get('use_base_manager', False)
@@ -90,13 +100,13 @@ class Command(BaseCommand):
 
         # Check that the serialization format exists; this is a shortcut to
         # avoid collating all the objects and _then_ failing.
-        if format not in serializers.get_public_serializer_formats():
-            raise CommandError("Unknown serialization format: %s" % format)
+        if format_name not in serializers.get_public_serializer_formats():
+            raise CommandError("Unknown serialization format: %s" % format_name)
 
         try:
-            serializers.get_serializer(format)
+            serializers.get_serializer(format_name)
         except KeyError:
-            raise CommandError("Unknown serialization format: %s" % format)
+            raise CommandError("Unknown serialization format: %s" % format_name)
 
         # Now collate the objects to be serialized.
         objects = []
@@ -110,7 +120,7 @@ class Command(BaseCommand):
                     objects.extend(model._default_manager.using(using).all())
 
         try:
-            return serializers.serialize(format, objects, indent=indent,
+            return serializers.serialize(format_name, objects, indent=indent,
                         use_natural_keys=use_natural_keys)
         except Exception, e:
             if show_traceback:

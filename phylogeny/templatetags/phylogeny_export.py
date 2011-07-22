@@ -1,3 +1,6 @@
+'''
+Exporter-related template tags.
+'''
 from django import template
 
 from phylogeny.exporters import exporter_registry

@@ -1,3 +1,6 @@
+'''
+Exports a phylogenetic tree (especially as from the command line).
+'''
 from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
@@ -30,10 +33,10 @@ class Command(BaseCommand):
 		except:
 			raise CommandError(_('File path missing'))
 		
-		format = options['format']
-		exporter = exporter_registry.get_by_format_name(format)
+		format_name = options['format']
+		exporter = exporter_registry.get_by_format_name(format_name)
 		exporter.taxon = taxon
 		exporter.export_to = path
 		exporter.save()
-		self.stdout.write(_('Successfully exported tree rooted on taxon "%(taxon_slug)s" to "%(path)s" in format "%(format)s"\n') % {'taxon_slug': taxon_slug, 'path': path, 'format': options['format']})
+		self.stdout.write(_('Successfully exported tree rooted on taxon "%(taxon_slug)s" to "%(path)s" in format "%(format)s"\n') % {'taxon_slug': taxon_slug, 'path': path, 'format': format_name})
 	

@@ -1,3 +1,6 @@
+'''
+Imports a phylogenetic tree (especially as from the command line).
+'''
 from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
@@ -19,8 +22,8 @@ class Command(BaseCommand):
 		except:
 			raise CommandError(_('Phylogeny path missing. For more information type:\npython manage.py help import-phylogeny'))
 		
-		format = options['format']
-		importer = importer_registry.get_by_format_name(format)
+		format_name = options['format']
+		importer = importer_registry.get_by_format_name(format_name)
 		importer.save(import_from=path)	
-		self.stdout.write(_('Successfully imported tree from "%(path)s" in format "%(format)s"\n') % {'path': path, 'format': options['format']})
+		self.stdout.write(_('Successfully imported tree from "%(path)s" in format "%(format)s"\n') % {'path': path, 'format': format_name})
 	
