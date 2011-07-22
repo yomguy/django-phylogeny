@@ -25,12 +25,6 @@ class DistributionPointManager(Manager):
 		return self.get(latitude=latitude, longitude=longitude, taxon=Taxon.objects.get_by_natural_key(taxon_slug))
 
 
-class ColorManager(Manager):
+class TaxaCategoryManager(Manager):
 	def get_by_natural_key(self, slug):
 		return self.get(slug=slug)
-
-
-class TaxonBackgroundColorManager(Manager):
-	def get_by_natural_key(self, color_slug, taxon_slug):
-		from phylogeny.models import Taxon, Color
-		return self.get(color=Color.objects.get_by_natural_key(color_slug), taxon=Taxon.objects.get_by_natural_key(taxon_slug))
