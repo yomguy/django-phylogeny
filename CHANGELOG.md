@@ -6,7 +6,7 @@
 * General codebase cleanup:  many suggestions from the pylint tool implemented.
 * Added more docstrings throughout app.
 * Added @stringfilter decorator on string output filters.
-* Simplified get_exporteres template tag with @register.assignment_tag decorator.
+* Simplified get_exporters template tag with @register.assignment_tag decorator.
 * Removed unused init file in fixtures/ folder.
 
 
