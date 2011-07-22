@@ -1,9 +1,11 @@
+'''
+Core Django Phylogeny data models.
+'''
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from mptt import models as mptt_models
-from Bio.Phylo.PhyloXML import Taxonomy
 
 from phylogeny import app_settings, utils, managers
 
@@ -15,7 +17,7 @@ ColorField = models.CharField
 if 'colors' in settings.INSTALLED_APPS:	
 	try:
 		from colors.fields import ColorField
-	except:
+	except ImportError:
 		pass
 
 

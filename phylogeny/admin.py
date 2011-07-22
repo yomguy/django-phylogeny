@@ -1,3 +1,6 @@
+'''
+Configuration for Django admin site.
+'''
 from functools import update_wrapper
 
 from django.contrib import admin
@@ -23,40 +26,47 @@ if 'modeltranslation' in settings.INSTALLED_APPS:
 		ModelAdmin = modeltranslation_admin.TranslationAdmin
 		TabularInline = modeltranslation_admin.TranslationTabularInline
 		StackedInline = modeltranslation_admin.TranslationStackedInline
-	except:
+	except ImportError:
 		pass
 
 
 class CitationAdmin(StackedInline):
+	'''Inline admin for the Citation model.'''
 	model = Citation
 	extra = 1
 
 
 class TaxonomyDatabaseAdmin(admin.ModelAdmin):
+	'''Admin for the TaxonomyDatabase model.'''
 	prepopulated_fields = {'slug': ('name',)}
 
 
 class TaxonomyRecordAdmin(admin.TabularInline):
+	'''Inline admin for the TaxonomyRecord model.'''
 	model = TaxonomyRecord
 	extra = 1
 
 
 class DistributionPointAdmin(TabularInline):
+	'''Inline admin for the DistributionPoint model.'''
 	model = DistributionPoint
 	extra = 1
 
 
 class TaxonImageCategoryAdmin(ModelAdmin):
+	'''Admin for the TaxonImageCategory model.'''
 	prepopulated_fields = {'slug': ('name',)}
 
 
 class TaxonImageAdmin(StackedInline):
+	'''Inline admin for the TaxonImage model.'''
 	model = TaxonImage
 	exclude = ('width', 'height',)
 	extra = 1
 
 
 class TaxaCategoryAdmin(admin.ModelAdmin):
+	'''Admin for the TaxaCategory model.'''
 	prepopulated_fields = {'slug': ('name',)}
 
 
@@ -72,12 +82,14 @@ class LeafNodeListFilter(admin.SimpleListFilter):
 	parameter_name = 'leaf_node'
 
 	def lookups(self, request, model_admin):
+		'''Returns options for this admin filter.'''
 		return (
 			('yes', _('yes')),
 			('no', _('no')),
 		)
 
 	def queryset(self, request, queryset):
+		'''Returns a queryset of items for the admin change list view.'''
 		leaf_pk_list = []
 		
 		# generates a list of primary keys of all leaf nodes
@@ -98,6 +110,7 @@ class LeafNodeListFilter(admin.SimpleListFilter):
 
 
 class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
+	'''Admin for the Taxon model.'''
 	list_display = ('name', 'rank', 'is_leaf_node',)
 	list_filter = (LeafNodeListFilter,)
 	search_fields = ('name', 'common_name', 'rank',)
@@ -137,7 +150,9 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 		Adds custom admin URLs for taxon management.
 		'''
 		def wrap(view):
+			'''Function for wrapping admin view functions.'''
 			def wrapper(*args, **kwargs):
+				'''Inner wrapper for custom admin view functions.'''
 				return self.admin_site.admin_view(view)(*args, **kwargs)
 			return update_wrapper(wrapper, view)
 			

@@ -1,3 +1,7 @@
+'''
+Model translation file used by the ModelTranslation app (if installed).  The
+classes specified here describe translateable fields on models.
+'''
 from modeltranslation.translator import translator, TranslationOptions
 
 from phylogeny.models import Taxon, Citation, DistributionPoint, TaxonImageCategory, TaxonImage, TaxaCategory

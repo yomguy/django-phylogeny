@@ -1,7 +1,9 @@
+'''
+Suite of tests for the Django Phylogeny app.
+'''
 import os
 
 from django.test import TestCase
-from django.utils.translation import ugettext_lazy as _
 
 import phylogeny
 from phylogeny.models import Taxon, TaxonomyDatabase, TaxonomyRecord, DistributionPoint

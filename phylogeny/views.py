@@ -1,7 +1,9 @@
+'''
+Django view classes for the Phylogeny app.
+'''
 from django.http import HttpResponse
 from django.views.generic.detail import BaseDetailView, DetailView
 from django.views.generic.edit import FormView
-from django import forms
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,12 +21,12 @@ class PhylogenyAdminVisualizeView(DetailView):
 	template_name = 'admin/phylogeny/visualize.html'
 	queryset = Taxon.objects.all()
 	
-	def render_to_response(self, context, **kwargs):
+	def render_to_response(self, context, *args, **kwargs):
 		'''
 		Renders a phylogeny import form.
 		'''
 		context.update({'is_popup': True})
-		return super(PhylogenyAdminVisualizeView, self).render_to_response(context)
+		return super(PhylogenyAdminVisualizeView, self).render_to_response(context, *args, **kwargs)
 
 
 class PhylogenyExportView(BaseDetailView):
@@ -44,19 +46,20 @@ class PhylogenyExportView(BaseDetailView):
 		'''
 		slug = self.kwargs['slug']
 		ext = self.kwargs['ext']
-		format = self.request.GET.get('format', '')
+		format_name = self.request.GET.get('format', '')
 		
 		content_type = 'text/plain'
 		if ext == 'xml':
 			content_type = 'application/xml'
 		
-		if format:
-			exporter = exporter_registry.get_by_format_name_and_extension(format, ext)
+		if format_name:
+			exporter = exporter_registry.get_by_format_and_extension(format_name, ext)
 		else:
 			exporter = exporter_registry.get_by_extension(ext)
 		
 		exporter.taxon = self.object
 		content = exporter()
+		print kwargs
 		response = HttpResponse(content, content_type=content_type, **kwargs)
 		response['Content-Disposition'] = 'attachment; filename=%s.%s' % (slug, ext)
 		
@@ -71,12 +74,12 @@ class PhylogenyAdminImportView(FormView):
 	template_name = 'admin/phylogeny/import_form.html'
 	form_class = PhylogenyImportForm
 	
-	def render_to_response(self, context, **kwargs):
+	def render_to_response(self, context, *args, **kwargs):
 		'''
 		Renders a phylogeny import form.
 		'''
 		context.update({'is_popup': True})
-		return super(PhylogenyAdminImportView, self).render_to_response(context)
+		return super(PhylogenyAdminImportView, self).render_to_response(context, *args, **kwargs)
 	
 	def post(self, request, *args, **kwargs):
 		'''
@@ -86,9 +89,9 @@ class PhylogenyAdminImportView(FormView):
 		form = self.get_form(form_class)
 		
 		if form.is_valid():
-			format = form.cleaned_data.get('file_format')
+			file_format = form.cleaned_data.get('file_format')
 			try:
-				importer = importer_registry.get_by_format_name(format)
+				importer = importer_registry.get_by_format_name(file_format)
 				for file_field in request.FILES:
 					importer.save(import_from=request.FILES[file_field])
 			except PhylogenyImportMergeConflict as exception:
@@ -106,4 +109,4 @@ class PhylogenyAdminImportView(FormView):
 				window.close();
 			</script>
 		''')
-	
+

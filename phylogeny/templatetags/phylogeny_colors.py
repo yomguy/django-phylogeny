@@ -1,4 +1,10 @@
+'''
+Phylogeny Colors filters are wrappers around the Django Colors app filters of
+the same names.  These wrappers as support for relative values using "+" and "-"
+operators, whereas Django Colors supports only absolute values.
+'''
 from django import template
+from django.template.defaultfilters import stringfilter
 from django.utils.translation import ugettext
 from django.conf import settings
 
@@ -16,6 +22,7 @@ register = template.Library()
 
 
 @register.filter
+@stringfilter
 def lightness(x, value):
 	'''
 	Extends colors app lightness filter with relative changes using "+" and "-".
@@ -41,6 +48,7 @@ def lightness(x, value):
 	return colors_lightness(x, value)
 
 @register.filter
+@stringfilter
 def saturation(x, value):
 	'''
 	Extends colors app saturation filter with relative changes using "+"
@@ -72,6 +80,7 @@ def saturation(x, value):
 	return colors_saturation(x, value)
 
 @register.filter
+@stringfilter
 def hue(x, value):
 	'''
 	Extends colors app hue filter with relative changes using "+" and "-".
