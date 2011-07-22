@@ -32,12 +32,4 @@ def get_exporters(parser, token):
 	var_name = bits[2]
 	
 	return ExportersNode(var_name)
-	
 
-@register.filter
-def xml_tagify(value):
-	'''
-	Replaces dashes with underscores, making string appropriate for use as an
-	XML tag.
-	'''
-	return value.replace('-', '_')
