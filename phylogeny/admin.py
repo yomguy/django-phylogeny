@@ -8,7 +8,7 @@ from django.conf import settings
 
 from mptt import admin as mptt_admin
 
-from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImageCategory, TaxonImage, Color, TaxonBackgroundColor
+from phylogeny.models import Taxon, Citation, TaxonomyDatabase, TaxonomyRecord, DistributionPoint, TaxonImageCategory, TaxonImage, TaxaCategory
 from phylogeny.views import PhylogenyAdminVisualizeView, PhylogenyAdminImportView
 
 
@@ -56,14 +56,8 @@ class TaxonImageAdmin(StackedInline):
 	extra = 1
 
 
-class ColorAdmin(admin.ModelAdmin):
+class TaxaCategoryAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug': ('name',)}
-
-
-class TaxonBackgroundColorAdmin(admin.StackedInline):
-	model = TaxonBackgroundColor
-	extra = 1
-	max_num = 1
 
 
 class LeafNodeListFilter(admin.SimpleListFilter):
@@ -110,7 +104,7 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 	readonly_fields = ('is_leaf_node',)
 	prepopulated_fields = {'slug': ('name',)}
 	save_on_top = True
-	inlines = (CitationAdmin, TaxonImageAdmin, DistributionPointAdmin, TaxonomyRecordAdmin, TaxonBackgroundColorAdmin,)
+	inlines = (CitationAdmin, TaxonImageAdmin, DistributionPointAdmin, TaxonomyRecordAdmin,)
 	change_list_template = ''
 	fieldsets = (
 		(None, {
@@ -118,7 +112,7 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 			'fields': (('name', 'slug',), 'rank', 'is_leaf_node',)
 		}),
 		(_('general information'), {
-			'fields': ('common_name', 'tagline', 'description', 'ecology', 'distribution',)
+			'fields': ('common_name', 'tagline', 'category', 'description', 'ecology', 'distribution',)
 		}),
 		(_('attribution'), {
 			'classes': ('collapse', 'wide',),
@@ -163,5 +157,5 @@ class TaxonAdmin(mptt_admin.MPTTModelAdmin, ModelAdmin):
 
 admin.site.register(TaxonomyDatabase, TaxonomyDatabaseAdmin)
 admin.site.register(TaxonImageCategory, TaxonImageCategoryAdmin)
-admin.site.register(Color, ColorAdmin)
+admin.site.register(TaxaCategory, TaxaCategoryAdmin)
 admin.site.register(Taxon, TaxonAdmin)

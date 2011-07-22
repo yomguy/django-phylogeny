@@ -1,5 +1,3 @@
-import re
-
 from django import template
 from django.utils.translation import ugettext
 
@@ -35,3 +33,11 @@ def get_exporters(parser, token):
 	
 	return ExportersNode(var_name)
 	
+
+@register.filter
+def xml_tagify(value):
+	'''
+	Replaces dashes with underscores, making string appropriate for use as an
+	XML tag.
+	'''
+	return value.replace('-', '_')
