@@ -34,6 +34,7 @@ class Taxon(mptt_models.MPTTModel):
 	# descriptive information
 	common_name = models.CharField(_('common name'), max_length=256, blank=True)
 	tagline = models.CharField(_('tagline'), max_length=256, blank=True, help_text=_('very short description'))
+	category = models.ForeignKey('TaxaCategory', verbose_name=_('category'), null=True, blank=True)
 	description = models.TextField(_('general description'), blank=True)
 	ecology = models.TextField(_('ecology'), blank=True)
 	distribution = models.TextField(_('distribution'), blank=True, help_text=_('explanation of distribution'))
@@ -228,47 +229,27 @@ class TaxonImage(models.Model):
 		return u'%s' % self.caption
 
 
-class Color(models.Model):
+class TaxaCategory(models.Model):
 	'''
-	Represents a reusable color style.  Color styles are primarily used by the
-	jsPhyloSVG PhyloXML exporter and the jsPhyloSVG phylogeny tree visualizer.
+	Describes a category of taxa.  Taxa categories may have color associated
+	with them.  Colors are primarily used by the jsPhyloSVG PhyloXML exporter
+	and the jsPhyloSVG phylogeny tree visualizer.
 	'''
 	name = models.CharField(_('name'), max_length=64)
 	slug = models.SlugField(_('slug'), unique=True, help_text=_('short label containing only letters, numbers, underscores, and/or hyphens; generally used in URLs'))
+	description = models.TextField(_('description'), blank=True)
 	color = ColorField(_('color'), max_length=7)
 	
 	# manager
-	objects = managers.ColorManager()
+	objects = managers.TaxaCategoryManager()
 	
 	class Meta:
-		verbose_name = _('color')
-		verbose_name_plural = _('colors')
+		verbose_name = _('taxa category')
+		verbose_name_plural = _('taxon categories')
 	
 	def __unicode__(self):
 		return u'%s' % self.name
 	
 	def natural_key(self):
 		return (self.slug,)
-
-
-class TaxonBackgroundColor(models.Model):
-	'''
-	Associates a background color with a taxon.
-	'''
-	color = models.ForeignKey(Color, verbose_name=_('color'))
-	taxon = models.ForeignKey(Taxon, verbose_name=_('taxon'))
-	
-	# manager
-	objects = managers.TaxonBackgroundColorManager()
-	
-	class Meta:
-		verbose_name = _('taxon background color')
-		verbose_name_plural = _('taxa background colors')
-		unique_together = ('color', 'taxon',)
-	
-	def __unicode__(self):
-		return u'%s: %s' % (self.color, self.taxon,)
-	
-	def natural_key(self):
-		return self.color.natural_key() + self.taxon.natural_key()
 

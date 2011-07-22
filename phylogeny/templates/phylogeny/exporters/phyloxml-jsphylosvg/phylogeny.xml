@@ -1,3 +1,4 @@
+{% load phylogeny_utils %}
 <phyloxml xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd' xmlns='http://www.phyloxml.org'>
 	<phylogeny rooted='false'>
 		<render>
@@ -11,18 +12,20 @@
 				</rectangular>
 			</parameters>
 			<styles>
-				{% for color in colors %}
-					{% if colors_app_installed %}
-						{% load phylogeny_colors %}
-						<{{ color.slug }} fill='#{{ color.color }}' stroke-width="0" type='radialGradient'>
-							<stop offset='0%' style='stop-color:#{{ color.color }}; stop-opacity:0'/>
-							<stop offset='93%' style='stop-color:#{{ color.color }}; stop-opacity:1'/>
-							<stop offset='100%' style='stop-color:#{{ color.color|lightness:'-6'|saturation:'+9' }}; stop-opacity:1'/>
-						</{{ color.slug }}>
-					{% else %}
-						<{{ color.slug }} fill='#{{ color.color }}' stroke-width='0' />
-					{% endif %}
-				{% endfor %}
+				{% if colors_app_installed %}
+					{% load phylogeny_colors %}
+					{% for category in taxa_categories %}
+						<{{ category.slug|xml_tagify }} fill='#{{ category.color }}' stroke-width="0" type='radialGradient'>
+							<stop offset='0%' style='stop-color:#{{ category.color }}; stop-opacity:0'/>
+							<stop offset='93%' style='stop-color:#{{ category.color }}; stop-opacity:1'/>
+							<stop offset='100%' style='stop-color:#{{ category.color|lightness:'-6'|saturation:'+9' }}; stop-opacity:1'/>
+						</{{ category.slug|xml_tagify }}>
+					{% endfor %}
+				{% else %}
+					{% for category in taxa_categories %}
+						<{{ category.slug|xml_tagify }} fill='#{{ category.color }}' stroke-width='0' />
+					{% endfor %}
+				{% endif %}
 			</styles>
 		</render>
 		<clade>

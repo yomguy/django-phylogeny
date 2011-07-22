@@ -1,5 +1,6 @@
+{% load phylogeny_utils %}
 <clade>
-	<name{% if object.taxonbackgroundcolor_set.all %} bgStyle="{{ object.taxonbackgroundcolor_set.all.0.color.slug }}"{% else %} bgStyle="default"{% endif %}>{{ object.name }}</name>
+	<name{% if object.category %} bgStyle="{{ object.category.slug|xml_tagify }}"{% else %} bgStyle="default"{% endif %}>{{ object.name }}</name>
 	<branch_length>{% if object.branch_length < 1 %}1.0{% else %}{{ object.branch_length }}{% endif %}</branch_length>
 	{% if object.tagline or object.get_absolute_url %}
 		<annotation>
