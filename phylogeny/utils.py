@@ -1,3 +1,6 @@
+'''
+General purpose functions.
+'''
 from os import path
 from datetime import datetime
 
@@ -12,7 +15,7 @@ def get_taxon_image_upload_to(instance, filename):
 		phylogeny/{{ model_name }}/{{ year }}/{{ month }}/
 	'''
 	media_ext = ''
-	media_filename, media_ext = path.splitext(filename)
+	media_ext = path.splitext(filename)[1]
 	return '%s/%s/%s/%s-%s-%s-%s%s' % (
 		instance.__class__._meta.app_label,
 		instance.taxon.__class__._meta.module_name,
@@ -38,4 +41,3 @@ def slugify_unique(value, model, slugfield='slug'):
 			return potential
 		# we hit a conflicting slug, so bump the suffix & try again
 		suffix += 1
-	

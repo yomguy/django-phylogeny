@@ -1,3 +1,6 @@
+'''
+Phylogeny URLs.
+'''
 from django.conf.urls.defaults import patterns, url, include
 from django.utils.translation import ugettext_lazy as _
 

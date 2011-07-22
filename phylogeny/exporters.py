@@ -1,4 +1,14 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
+'''
+Phylogeny exporters output a phylogeny format (such as Nexus or PhyloXML) rooted
+on a given Taxon instance.
+
+Exporter classes must be based on the ABC AbstractBasePhyloExporter.  Exporters
+should register with the exporter registry to make themselves known and
+accessible throughout the app:
+
+	exporter_registry.register(<MyExporterClass>)
+'''
+from abc import ABCMeta, abstractmethod
 from inspect import isclass
 
 from django.template import Context
@@ -10,7 +20,7 @@ from django.conf import settings
 from Bio import Phylo
 
 from phylogeny.models import Taxon, TaxaCategory
-from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound
+from phylogeny.exceptions import PhyloExporterUnsupportedTaxonAssignment, PhyloExporterMissingAttribute, PhyloExporterRegistryOnlyClassesMayRegister, PhyloExporterRegistryClassAlreadyRegistered, PhyloExporterRegistryExporterNotFound
 
 
 class ExporterRegistry(object):
@@ -61,7 +71,7 @@ class ExporterRegistry(object):
 				return exporter_class()
 		raise PhyloExporterRegistryExporterNotFound(ugettext('Exporter with extension %s not found.') % extension)
 	
-	def get_by_format_name_and_extension(self, format_name, extension):
+	def get_by_format_and_extension(self, format_name, extension):
 		'''
 		Returns an instance of the first exporter with both a matching format
 		name and extension.
@@ -85,17 +95,18 @@ class AbstractBasePhyloExporter(object):
 	# file extension of phylogeny format
 	extension = None
 	
-	def __init__(self, taxon=None, export_to=None, **kwargs):
+	def __init__(self, taxon=None, export_to=None, *args, **kwargs):
 		'''Initializes an instance of the phylogeny exporter.'''
+		super(AbstractBasePhyloExporter, self).__init__(*args, **kwargs)
+		self._taxon = None
+		self._export_to = None
 		self.taxon = taxon
 		self.export_to = export_to
 		
 		if self.format_name is None:
-			raise PhyloExporterMissingAttrbute(ugettext('Exporter %s missing `format_name`.') % self)
+			raise PhyloExporterMissingAttribute(ugettext('Exporter %s missing `format_name`.') % self)
 		if self.extension is None:
 			raise PhyloExporterMissingAttribute(ugettext('Exporter %s missing `extension`.') % self)
-		
-		return super(AbstractBasePhyloExporter, self).__init__()
 	
 	def __repr__(self):
 		'''Returns the unicode representation of an exporter instance.'''
@@ -302,22 +313,22 @@ class JSPhyloSVGPhyloXMLPhyloExporter(AbstractBasePhyloExporter):
 	def get_object(self):
 		'''Returns a jsPhyloSVG PhyloXML string.'''
 		template_path = 'phylogeny/exporters/%s/%s.%s'
-		t = get_template(template_path % (self.format_name, 'phylogeny', self.extension,))
-		c = Context({
+		template = get_template(template_path % (self.format_name, 'phylogeny', self.extension,))
+		context = Context({
 			'taxa_categories': TaxaCategory.objects.all,
 			'colors_app_installed': ('colors' in settings.INSTALLED_APPS),
 			'object': self.taxon,
 			'clade_template_path': template_path % (self.format_name, 'clade', self.extension,)
 		})
-		return t.render(c)
+		return template.render(context)
 	
 	def save(self, export_to=None):
 		'''Saves the jsPhyloSVG PhyloXML to file.'''
 		if export_to is not None:
 			self.export_to = export_to
 		output = self()
-		with open(self.export_to, 'w') as f:
-			f.write(output)
+		with open(self.export_to, 'w') as open_file:
+			open_file.write(output)
 	
 
 # registry is used to register exporter classes and report on them

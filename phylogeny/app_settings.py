@@ -1,3 +1,6 @@
+'''
+General app-wide settings for Django Phylogeny.
+'''
 from django.utils.translation import ugettext_lazy as _
 
 from Bio.Phylo.PhyloXML import Taxonomy
