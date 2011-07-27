@@ -1,5 +1,10 @@
 # Django Phylogeny Changelog
 
+## v0.5.3 (2011.july.22):
+
+* "Pruning filter" added to phylogeny exporters.  Pruning filters are queryset filter dictionaries.  The children of matching taxa are excluded from export on exporters with a valid pruning filter dictionary.
+* "Rank filter" added to visualize and export views.  An optional URL parameter `?rank_filter=RANK` may be added to the admin visualize view as well as raw exporter views.
+
 
 ## v0.5.2 (2011.july.22):
 
