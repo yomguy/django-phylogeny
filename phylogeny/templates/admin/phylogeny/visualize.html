@@ -22,7 +22,7 @@
 		(function () {
 			$(function () {
 				$.ajax({
-					url: '{% url phylogeny:export slug=object.slug ext="xml" %}?format=phyloxml-jsphylosvg',
+					url: '{% url phylogeny:export slug=object.slug ext="xml" %}?format=phyloxml-jsphylosvg{% if rank_filter %}&amp;rank_filter={{ rank_filter }}{% endif %}',
 					dataType: 'xml',
 					success: function (data) {
 						new Smits.PhyloCanvas(

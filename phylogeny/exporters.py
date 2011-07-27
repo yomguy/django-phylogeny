@@ -11,6 +11,7 @@ accessible throughout the app:
 from abc import ABCMeta, abstractmethod
 from inspect import isclass
 
+from django.db import transaction
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.translation import ugettext
@@ -95,13 +96,15 @@ class AbstractBasePhyloExporter(object):
 	# file extension of phylogeny format
 	extension = None
 	
-	def __init__(self, taxon=None, export_to=None, *args, **kwargs):
+	def __init__(self, taxon=None, export_to=None, pruning_filter=None, *args, **kwargs):
 		'''Initializes an instance of the phylogeny exporter.'''
 		super(AbstractBasePhyloExporter, self).__init__(*args, **kwargs)
 		self._taxon = None
 		self._export_to = None
+		self._pruning_filter = None
 		self.taxon = taxon
 		self.export_to = export_to
+		self.pruning_filter = pruning_filter
 		
 		if self.format_name is None:
 			raise PhyloExporterMissingAttribute(ugettext('Exporter %s missing `format_name`.') % self)
@@ -167,6 +170,30 @@ class AbstractBasePhyloExporter(object):
 	def export_to(self, export_to):
 		'''Sets the value of the `export_to` property.'''
 		self._export_to = export_to
+	
+	@property
+	def pruning_filter(self):
+		'''
+		Returns the pruning filter dictionary, a queryset filter dictionary or
+		callable which returns one.  The children of matching taxa are excluded
+		from export.
+		'''
+		pruning_filter = None
+		
+		if callable(self._pruning_filter):
+			pruning_filter = self._pruning_filter()
+		elif self._pruning_filter:
+			pruning_filter = self._pruning_filter
+		
+		if not isinstance(pruning_filter, dict):
+			pruning_filter = None
+		
+		return pruning_filter
+	
+	@pruning_filter.setter
+	def pruning_filter(self, pruning_filter):
+		'''Sets the value of the `pruning_filter` property.'''
+		self._pruning_filter = pruning_filter
 	
 	@abstractmethod
 	def get_object(self):
@@ -268,8 +295,23 @@ class AbstractBaseBiopythonPhyloExporter(AbstractBasePhyloExporter):
 	
 	def get_object(self):
 		'''Returns a Biopython phylogeny object.'''
-		clade = self.get_clade_for_taxon(self.taxon)
+		# open a transaction so that taxa may be pruned during export
+		# and then rolled back
+		with transaction.commit_manually():
+			# if there is a pruning filter, delete all children of matching taxa
+			pruning_filter = self.pruning_filter
+			if pruning_filter:
+				for taxon in Taxon.objects.filter(**pruning_filter):
+					for child in taxon.get_children():
+						child.delete()
+			# get the clade (and its children) for the taxon
+			clade = self.get_clade_for_taxon(self.taxon)
+			# rollback the transaction
+			# (don't actually allow any taxon deletions to stand)
+			transaction.rollback()
+		
 		phylogeny = clade.to_phylogeny()
+		
 		return phylogeny
 	
 	def save(self, export_to=None):
@@ -312,15 +354,31 @@ class JSPhyloSVGPhyloXMLPhyloExporter(AbstractBasePhyloExporter):
 	
 	def get_object(self):
 		'''Returns a jsPhyloSVG PhyloXML string.'''
-		template_path = 'phylogeny/exporters/%s/%s.%s'
-		template = get_template(template_path % (self.format_name, 'phylogeny', self.extension,))
-		context = Context({
-			'taxa_categories': TaxaCategory.objects.all,
-			'colors_app_installed': ('colors' in settings.INSTALLED_APPS),
-			'object': self.taxon,
-			'clade_template_path': template_path % (self.format_name, 'clade', self.extension,)
-		})
-		return template.render(context)
+		# open a transaction so that taxa may be pruned during export
+		# and then rolled back
+		with transaction.commit_manually():
+			# if there is a pruning filter, delete all children of matching taxa
+			pruning_filter = self.pruning_filter
+			if pruning_filter:
+				for taxon in Taxon.objects.filter(**pruning_filter):
+					for child in taxon.get_children():
+						child.delete()
+			
+			# get template, context, and render the template
+			template_path = 'phylogeny/exporters/%s/%s.%s'
+			template = get_template(template_path % (self.format_name, 'phylogeny', self.extension,))
+			context = Context({
+				'taxa_categories': TaxaCategory.objects.all,
+				'colors_app_installed': ('colors' in settings.INSTALLED_APPS),
+				'object': self.taxon,
+				'clade_template_path': template_path % (self.format_name, 'clade', self.extension,)
+			})
+			rendered_template = template.render(context)
+			# rollback the transaction
+			# (don't actually allow any taxon deletions to stand)
+			transaction.rollback()
+		
+		return rendered_template
 	
 	def save(self, export_to=None):
 		'''Saves the jsPhyloSVG PhyloXML to file.'''
