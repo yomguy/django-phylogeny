@@ -293,7 +293,6 @@ class AbstractBaseBiopythonPhyloExporter(AbstractBasePhyloExporter):
 		
 		return clade
 	
-	
 	def get_object(self):
 		'''Returns a Biopython phylogeny object.'''
 		# open a transaction so that taxa may be pruned during export
