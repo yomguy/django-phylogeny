@@ -23,9 +23,10 @@ class PhylogenyAdminVisualizeView(DetailView):
 	
 	def render_to_response(self, context, *args, **kwargs):
 		'''
-		Renders a phylogeny import form.
+		Renders a phylogeny visualization.
 		'''
-		context.update({'is_popup': True})
+		rank_filter = self.request.GET.get('rank_filter', '')
+		context.update({'is_popup': True, 'rank_filter': rank_filter})
 		return super(PhylogenyAdminVisualizeView, self).render_to_response(context, *args, **kwargs)
 
 
@@ -47,6 +48,7 @@ class PhylogenyExportView(BaseDetailView):
 		slug = self.kwargs['slug']
 		ext = self.kwargs['ext']
 		format_name = self.request.GET.get('format', '')
+		rank_filter = self.request.GET.get('rank_filter', '')
 		
 		content_type = 'text/plain'
 		if ext == 'xml':
@@ -58,6 +60,10 @@ class PhylogenyExportView(BaseDetailView):
 			exporter = exporter_registry.get_by_extension(ext)
 		
 		exporter.taxon = self.object
+		if rank_filter:
+			print rank_filter
+			exporter.pruning_filter = {'rank': rank_filter}
+			print exporter.pruning_filter
 		content = exporter()
 		print kwargs
 		response = HttpResponse(content, content_type=content_type, **kwargs)
