@@ -14,22 +14,6 @@ from phylogeny.exceptions import PhylogenyImportMergeConflict
 from phylogeny.importers import importer_registry
 
 
-class PhylogenyAdminVisualizeView(DetailView):
-	'''
-	Renders a visualization of a phylogeny rooted on the given taxon.
-	'''
-	template_name = 'admin/phylogeny/visualize.html'
-	queryset = Taxon.objects.all()
-	
-	def render_to_response(self, context, *args, **kwargs):
-		'''
-		Renders a phylogeny visualization.
-		'''
-		rank_filter = self.request.GET.get('rank_filter', '')
-		context.update({'is_popup': True, 'rank_filter': rank_filter})
-		return super(PhylogenyAdminVisualizeView, self).render_to_response(context, *args, **kwargs)
-
-
 class PhylogenyExportView(BaseDetailView):
 	'''
 	Exports a phylogeny to a downloadable file.  The phylogeny is rooted on the
@@ -70,6 +54,22 @@ class PhylogenyExportView(BaseDetailView):
 		response['Content-Disposition'] = 'attachment; filename=%s.%s' % (slug, ext)
 		
 		return response
+
+
+class PhylogenyAdminVisualizeView(DetailView):
+	'''
+	Renders a visualization of a phylogeny rooted on the given taxon.
+	'''
+	template_name = 'admin/phylogeny/visualize.html'
+	queryset = Taxon.objects.all()
+
+	def render_to_response(self, context, *args, **kwargs):
+		'''
+		Renders a phylogeny visualization.
+		'''
+		rank_filter = self.request.GET.get('rank_filter', '')
+		context.update({'is_popup': True, 'rank_filter': rank_filter})
+		return super(PhylogenyAdminVisualizeView, self).render_to_response(context, *args, **kwargs)
 
 
 class PhylogenyAdminImportView(FormView):
