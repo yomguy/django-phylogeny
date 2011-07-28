@@ -45,11 +45,8 @@ class PhylogenyExportView(BaseDetailView):
 		
 		exporter.taxon = self.object
 		if rank_filter:
-			print rank_filter
 			exporter.pruning_filter = {'rank': rank_filter}
-			print exporter.pruning_filter
 		content = exporter()
-		print kwargs
 		response = HttpResponse(content, content_type=content_type, **kwargs)
 		response['Content-Disposition'] = 'attachment; filename=%s.%s' % (slug, ext)
 		
