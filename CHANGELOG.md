@@ -1,5 +1,12 @@
 # Django Phylogeny Changelog
 
+
+## v0.5.4 (2011.july.27):
+
+* Changed order of views in views.py:  admin views appear last.
+* Removed diagnostic print statements which were inadvertently released.
+
+
 ## v0.5.3 (2011.july.22):
 
 * "Pruning filter" added to phylogeny exporters.  Pruning filters are queryset filter dictionaries.  The children of matching taxa are excluded from export on exporters with a valid pruning filter dictionary.
